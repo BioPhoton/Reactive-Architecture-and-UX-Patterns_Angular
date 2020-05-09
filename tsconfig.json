@@ -14,7 +14,21 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "combining-streams": [
+        "projects/combining-streams/src"
+      ],
+      "combining-streams/*": [
+        "projects/combining-streams/src/*"
+      ],
+      "shared": [
+        "projects/shared/src"
+      ],
+      "shared/*": [
+        "projects/shared/src/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

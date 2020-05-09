@@ -1,0 +1,15 @@
+body {
+
+}
+.row {
+  display: flex;
+  margin: 0 -15px;
+  .col {
+    flex-grow: 2;
+    padding: 0 15px;
+  }
+  .col-3 {
+    flex-grow: 3;
+    padding: 0 15px;
+  }
+}
