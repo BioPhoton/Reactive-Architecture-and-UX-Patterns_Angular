@@ -1,12 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import {
-  catchError,
-  delay,
-  distinctUntilChanged,
-  map
-} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {delay, map} from 'rxjs/operators';
 import {Item, List} from "shared";
 
 interface ListServiceState {
@@ -21,7 +15,7 @@ interface ListServiceState {
 })
 export class ForkJoinListService {
 
-  constructor(private http: HttpClient) {
+  constructor() {
 
   }
 

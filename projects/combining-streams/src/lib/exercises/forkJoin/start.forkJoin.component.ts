@@ -19,8 +19,6 @@ import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/fork
 })
 export class StartForkJoinComponent {
 
-  // 1. Use `forJoin` to get lists and todos (httpGetLists(), httpGetTodos())
-  // 2. Use `leftJoin(items, lists, 'lId')`
   list$: Observable<any> = interval(1000);
 
   constructor(private listService: ForkJoinListService) {

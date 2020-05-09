@@ -3,15 +3,15 @@ import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {ROUTES} from "./http-service-v1.routes";
 import {MatButtonModule} from "@angular/material/button";
-import {StartForkJoinComponent} from "combining-streams/lib/exercises/forkJoin/start.forkJoin.component";
-import {SolutionForkJoinComponent} from "combining-streams/lib/exercises/forkJoin/solution.forkJoin.component";
 import {MatListModule} from "@angular/material/list";
 import {HttpClientModule} from "@angular/common/http";
+import {StartHttpServiceV1Component} from "combining-streams/lib/exercises/http-service-v1/start.http-service-v1.component";
+import {SolutionHttpServiceV1Component} from "combining-streams/lib/exercises/http-service-v1/solution.http-service-v1.component";
 
 @NgModule({
   declarations: [
-    StartForkJoinComponent,
-    SolutionForkJoinComponent
+    StartHttpServiceV1Component,
+    SolutionHttpServiceV1Component
   ],
   imports: [
     CommonModule,

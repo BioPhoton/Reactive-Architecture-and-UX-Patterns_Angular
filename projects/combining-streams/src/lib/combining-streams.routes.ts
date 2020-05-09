@@ -1,7 +1,3 @@
-import {ROUTES as COMBINE_LATEST} from './exercises/combineLatest/combineLatest.routes'
-import {ROUTES as FORK_JOIN} from './exercises/forkJoin/forkJoin.routes'
-import {ROUTES as WITH_LATEST_FROM} from './exercises/withLatestFrom/withLatestFrom.routes'
-import {ROUTES as ZIP} from './exercises/zip/zip.routes';
 import {CombiningStreamsContainerComponent} from "./combining-streams.container.component";
 
 export const ROUTES = [
