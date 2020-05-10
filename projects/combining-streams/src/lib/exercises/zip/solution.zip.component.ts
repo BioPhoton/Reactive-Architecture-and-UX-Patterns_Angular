@@ -45,7 +45,7 @@ import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.servi
   `]
 })
 export class SolutionZipComponent {
-  iName: string = '';
+  iName = 'my new item';
   numRenders = 0;
 
   renders() {
