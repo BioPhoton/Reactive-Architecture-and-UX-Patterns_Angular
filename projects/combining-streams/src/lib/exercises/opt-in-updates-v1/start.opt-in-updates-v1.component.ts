@@ -1,59 +1,53 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {combineLatest, Observable, Subject} from "rxjs";
-import {map, withLatestFrom} from "rxjs/operators";
-import {JoinedItem, ListService, mergeListsAndItems} from "shared";
+import {Component} from '@angular/core';
+import {combineLatest, concat, of, Subject} from "rxjs";
+import {filter, map, shareReplay, take, withLatestFrom} from "rxjs/operators";
+import {mergeListsAndItems} from "shared";
+import {optInUpdatesV1ListService} from "combining-streams/lib/exercises/opt-in-updates-v1/opt-in-updates-v1-list.service";
 
 @Component({
-    selector: 'opt-in-updates',
-    template: `<h3>Opt-in Updates</h3>
+  selector: 'opt-in-updates',
+  template: `<h3>Opt-in Updates</h3>
 
-    <mat-form-field>
-        <label>Name</label>
-        <input matInput (input)="nameInput.next($event)"/>
-    </mat-form-field>
+  <mat-form-field>
+    <label>Name</label>
+    <input matInput name="iName" [(ngModel)]="iName"/>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
 
-    <button mat-raised-button color="primary" (click)="saveClick.next($event)">
-        Save
-    </button>
-
+  <ng-container *ngIf="(numNewItems$ | async) as numItems">
     <button mat-raised-button color="accent"
-            (click)="optInListClick.next($event)">
-        Update List (optional number of items)
+            *ngIf="numItems > 0"
+            (click)="optInListClick$.next($event)">
+      Update List ({{(numItems)}})
     </button>
+  </ng-container>
 
-    <!--
-    DEBUG:
-    joinedItemList$: {{numNewItems$ | async | json}}<br/>
-    -->
-
-    <div *ngIf="joinedItemList$ | async as list">
-        <mat-list>
-            <mat-list-item *ngFor="let item of list">
-                {{item.iName}} - {{item.lName}}
-            </mat-list-item>
-        </mat-list>
-    </div>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+  <div *ngIf="joinedList$ | async as list">
+    <mat-list>
+      <mat-list-item *ngFor="let item of list">
+        {{item.iName}}
+      </mat-list-item>
+    </mat-list>
+  </div>
+  `
 })
 export class StartOptInUpdatesV1Component {
 
-    nameInput = new Subject<Event>();
-    nameValue$ = this.nameInput.pipe(map((e: any) => e.target.value));
-    saveClick = new Subject<Event>();
-    optInListClick = new Subject<Event>();
+  iName = 'my new item';
+  optInListClick$ = new Subject();
+  numNewItems$ = of(0);
 
-    joinedItemList$: Observable<JoinedItem[]> = combineLatest([
-      this.s.lists$,
-      this.s.items$
-    ])
-        .pipe(
-            map(([lists, items]) => mergeListsAndItems(lists, items))
-        );
+  joinedList$ = combineLatest([
+    this.listService.lists$.pipe(filter(l => !!l.length)),
+    this.listService.items$.pipe(filter(l => !!l.length))
+  ]).pipe(
+    map(([list, items]) => mergeListsAndItems(list, items)),
+    shareReplay(1)
+  );
 
-    constructor(private s: ListService) {
-
-    }
+  constructor(private listService: optInUpdatesV1ListService) {
+    this.listService.refetchLists();
+    this.listService.refetchItems();
+  }
 
 }

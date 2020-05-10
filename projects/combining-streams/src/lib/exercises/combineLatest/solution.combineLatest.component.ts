@@ -13,7 +13,7 @@ import {combineLatestListService} from "combining-streams/lib/exercises/combineL
       <label>Name</label>
       <input matInput name="iName" [(ngModel)]="iName"/>
     </mat-form-field>
-    <button (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
+    <button mat-raised-button color="primary" (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
 
     <div *ngIf="list$ | async as list">
       <mat-list>
@@ -36,7 +36,7 @@ export class SolutionCombineLatestComponent {
       map(([list, items]) => mergeListsAndItems(list, items))
     );
 
-  constructor(private listService: combineLatestListService) {
+  constructor(public listService: combineLatestListService) {
     this.listService.refetchLists();
     this.listService.refetchItems();
   }

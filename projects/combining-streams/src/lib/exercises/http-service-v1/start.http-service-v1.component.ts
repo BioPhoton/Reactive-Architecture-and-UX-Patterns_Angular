@@ -8,7 +8,7 @@ import {map} from "rxjs/operators";
   selector: 'custom-http-service-v1',
   template: `<h3>custom-http-service-v1</h3>
 
-  <button (click)="listService.addItems({iName: 'new item', lId: 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addItems({iName: 'new item', lId: 1})">AddItem</button>
 
   <div *ngIf="list$ | async as list">
     <mat-list>
@@ -31,7 +31,7 @@ export class StartHttpServiceV1Component {
     map(([lists, items]) => mergeListsAndItems(lists, items))
   );
 
-  constructor(private listService: StartHttpV1Service) {
+  constructor(public listService: StartHttpV1Service) {
 
   }
 

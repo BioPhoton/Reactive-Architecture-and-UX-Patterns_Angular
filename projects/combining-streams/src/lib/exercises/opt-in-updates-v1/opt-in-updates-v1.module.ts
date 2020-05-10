@@ -8,6 +8,8 @@ import {RouterModule} from "@angular/router";
 import {ROUTES} from "./opt-in-updates-v1.routes";
 import {NgModule} from "@angular/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {FormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -16,9 +18,11 @@ import {MatFormFieldModule} from "@angular/material/form-field";
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatListModule,
     MatFormFieldModule,
+    MatInputModule,
     HttpClientModule,
     RouterModule.forChild(ROUTES)
   ]

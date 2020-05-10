@@ -12,7 +12,7 @@ import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.servi
     <label>Name</label>
     <input matInput name="iName" [(ngModel)]="iName"/>
   </mat-form-field>
-  <button (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
 
   <p><b>renders: {{renders()}}</b></p>
   <p><b>processJoinedList: {{processJoinedList()}}</b></p>
@@ -88,7 +88,7 @@ export class StartZipComponent {
       tap(v => ++this.numProcessLikedList)
     );
 
-  constructor(private listService: zipListService) {
+  constructor(public listService: zipListService) {
     this.listService.refetchLists();
     this.listService.refetchItems();
   }

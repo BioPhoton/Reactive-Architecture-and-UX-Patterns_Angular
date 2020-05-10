@@ -1,80 +1,68 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {combineLatest, concat, Observable, Subject} from "rxjs";
-import {map, take, withLatestFrom} from "rxjs/operators";
+import {Component} from '@angular/core';
+import {combineLatest, concat, Observable, of, Subject} from "rxjs";
+import {filter, map, shareReplay, take, withLatestFrom} from "rxjs/operators";
 import {JoinedItem, mergeListsAndItems} from "shared";
-import {BasicStoreService} from "combining-streams/lib/exercises/opt-in-updates-v1/basic.store";
+import {optInUpdatesV1ListService} from "combining-streams/lib/exercises/opt-in-updates-v1/opt-in-updates-v1-list.service";
 
 @Component({
   selector: 'solution-opt-in-updates-basic',
   template: `<h3>(Solution) Opt-in Updates</h3>
+
   <mat-form-field>
     <label>Name</label>
-    <input matInput (input)="nameInput.next($event)"/>
+    <input matInput name="iName" [(ngModel)]="iName"/>
   </mat-form-field>
+  <button mat-raised-button color="primary" (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
 
-  <button mat-raised-button color="primary" (click)="saveClick.next($event)">
-    Save
-  </button>
-
-  <ng-container *ngIf="(numNewItems$ | async)+'' as numItems">
+  <ng-container *ngIf="(numNewItems$ | async) as numItems">
     <button mat-raised-button color="accent"
             *ngIf="numItems > 0"
-            (click)="optInListClick.next($event)">
+            (click)="optInListClick$.next($event)">
       Update List ({{(numItems)}})
     </button>
   </ng-container>
 
-  <div *ngIf="joinedItemList$ | async as list">
+  <div *ngIf="acceptedItems$ | async as list">
     <mat-list>
       <mat-list-item *ngFor="let item of list">
         {{item.iName}}
       </mat-list-item>
     </mat-list>
   </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  `
 })
 export class SolutionOptInUpdatesV1Component {
 
-  items$ = this.s.select('items');
-  lists$ = this.s.select('lists');
+  iName = 'my new item';
+  optInListClick$ = new Subject();
 
-  nameInput = new Subject<Event>();
-  nameValue$ = this.nameInput.pipe(map((e: any) => e.target.value));
-  saveClick = new Subject<Event>();
-  optInListClick = new Subject<Event>();
+  joinedList$ = combineLatest([
+    this.listService.lists$.pipe(filter(l => !!l.length)),
+    this.listService.items$.pipe(filter(l => !!l.length))
+  ]).pipe(
+    map(([list, items]) => mergeListsAndItems(list, items)),
+    shareReplay(1)
+  );
 
   acceptedItems$ = concat(
-    this.items$.pipe(take(1)),
-    this.optInListClick.pipe(
-      withLatestFrom(this.items$),
+    this.joinedList$.pipe(take(1)),
+    this.optInListClick$.pipe(
+      withLatestFrom(this.joinedList$),
       map(([_, items]) => items)
     )
   );
-
-  numNewItems$: Observable<number> = combineLatest(
-    this.items$,
+  numNewItems$: Observable<number> = combineLatest([
+    this.joinedList$,
     this.acceptedItems$
-  )
+  ])
     .pipe(
       map(([a, b]) => Math.abs(a.length - b.length))
     );
 
-  joinedItemList$: Observable<JoinedItem[]> = combineLatest([
-    this.lists$,
-    this.acceptedItems$
-  ])
-    .pipe(
-      map(([lists, items]) => mergeListsAndItems(lists, items))
-    );
 
-  constructor(private s: BasicStoreService) {
-    this.s.initState();
-    this.s.connectUpsertManyItems(this.saveClick.pipe(
-      withLatestFrom(this.nameValue$),
-      map(([_, iName]) => ([{iId: ~~(Math.random() * 100) + '', iName, lId: '1'}]))
-    ))
+  constructor(private listService: optInUpdatesV1ListService) {
+    this.listService.refetchLists();
+    this.listService.refetchItems();
   }
 
 }
