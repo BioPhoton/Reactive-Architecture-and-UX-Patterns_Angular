@@ -9,7 +9,8 @@ export function mergeListsAndItems(lists: List[], items: Item[]): Array<JoinedIt
         iId: item.id,
         iName: item.iName,
         lId: list.id,
-        lName: list.lName
+        lName: list.lName,
+        liked: item.liked
       })
     }
   );

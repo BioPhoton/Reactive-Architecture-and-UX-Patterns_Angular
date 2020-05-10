@@ -44,18 +44,18 @@ If we understand every of those "broken parts" we are intuitively able to unders
 
 Within this set of lessons we will walk through the following exercises:
 
-- We start we a simple setup where we derive data in our component directly over HTTP requests by using `forkJoin`
+- [] We start we a simple setup where we derive data in our component directly over HTTP requests by using `forkJoin`
   - with this architecture we realize, we quickly run into the problem of over-fetching
 - To solve it we refactor the give HTTP service to get more control over when we fetch the data
   - this reviles one of the special behaviours of `frokJoin` and we need to rethink it usage
-- We learn the difference of `forkJoin` and `combineLatest` 
+- [] We learn the difference of `forkJoin` and `combineLatest` 
   - this knowledge helps us to refactor the service and component.
 - As we go we start to introduce more features into our UI
    - again we run into a problem, this time over-rendering.
-- To understand the problem we learn about the terms `Normalized` and `Denormalized` data 
+- [] To understand the problem we learn about the terms `Normalized` and `Denormalized` data 
   -  by using `zip` for our calculation we are able to solve the problem of over-rendering
-- As it was quite technical so far we learn about `withLatestFrom` with a more playful example 
+- [] As it was quite technical so far we learn about `withLatestFrom` with a more playful example 
   - by doing so we understand the concept of `promary` and `secondary` streams
-- With a fresh and open mine we think about those concepts in combination with a UX Pattern called `opt-in updates`
+- [] With a fresh and open mine we think about those concepts in combination with a UX Pattern called `opt-in updates`
   - to give a better experience to our users we implement this pattern in our example
 

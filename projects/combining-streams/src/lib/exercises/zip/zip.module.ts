@@ -6,6 +6,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {StartZipComponent} from "combining-streams/lib/exercises/zip/start.zip.component";
 import {SolutionZipComponent} from "combining-streams/lib/exercises/zip/solution.zip.component";
 import {MatListModule} from "@angular/material/list";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,8 +17,11 @@ import {MatListModule} from "@angular/material/list";
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
     RouterModule.forChild(ROUTES)
   ]
 })

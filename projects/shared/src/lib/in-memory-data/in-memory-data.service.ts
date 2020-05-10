@@ -9,16 +9,16 @@ export class InMemoryDataService implements InMemoryDbService {
   createDb() {
     // const name is resource URL
     const item: Item[] = [
-      {id: 11, iName: 'Item 11', lId: 1},
-      {id: 12, iName: 'Item 12', lId: 1},
-      {id: 13, iName: 'Item 13', lId: 1},
-      {id: 14, iName: 'Item 14', lId: 1},
-      {id: 15, iName: 'Item 15', lId: 2},
-      {id: 16, iName: 'Item 16', lId: 2},
-      {id: 17, iName: 'Item 17', lId: 2},
-      {id: 18, iName: 'Item 18', lId: 3},
-      {id: 19, iName: 'Item 19', lId: 3},
-      {id: 20, iName: 'Item 20', lId: 3}
+      {id: 11, iName: 'Item 11', lId: 1, liked: true},
+      {id: 12, iName: 'Item 12', lId: 1, liked: true},
+      {id: 13, iName: 'Item 13', lId: 1, liked: false},
+      {id: 14, iName: 'Item 14', lId: 1, liked: true},
+      {id: 15, iName: 'Item 15', lId: 2, liked: true},
+      {id: 16, iName: 'Item 16', lId: 2, liked: false},
+      {id: 17, iName: 'Item 17', lId: 2, liked: true},
+      {id: 18, iName: 'Item 18', lId: 3, liked: false},
+      {id: 19, iName: 'Item 19', lId: 3, liked: false},
+      {id: 20, iName: 'Item 20', lId: 3, liked: true}
     ];
     // const name is resource URL
     const list: List[] = [

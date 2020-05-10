@@ -3,4 +3,5 @@ export interface JoinedItem {
   lName: string;
   iId: number;
   iName: string;
+  liked: boolean
 }
