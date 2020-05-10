@@ -16,9 +16,9 @@ export function mergeListsAndItems(lists: List[], items: Item[]): Array<JoinedIt
   );
 }
 
-export function upsertEntities<T>(oldEntities: T[], newLists: T[], id: string): T[] {
-  const insertLists = newLists.filter(nL => !oldEntities.find(oL => oL[id] === nL[id]))
-  const updateLists = newLists.filter(nL => oldEntities.find(oL => oL[id] === nL[id]))
+export function upsertEntities<T>(oldEntities: T[], newEntities: T[], id: string): T[] {
+  const insertLists = newEntities.filter(nL => !oldEntities.find(oL => oL[id] === nL[id]))
+  const updateLists = newEntities.filter(nL => oldEntities.find(oL => oL[id] === nL[id]))
 
   return insertLists.concat(
     oldEntities.map(

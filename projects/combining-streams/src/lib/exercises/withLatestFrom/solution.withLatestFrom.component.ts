@@ -1,13 +1,6 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
-import {combineLatest, fromEvent, ReplaySubject, Subject, Subscription} from "rxjs";
-import {map, startWith, withLatestFrom} from "rxjs/operators";
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {combineLatest, fromEvent, ReplaySubject, Subscription, zip} from "rxjs";
+import {map, shareReplay, startWith, tap, withLatestFrom} from "rxjs/operators";
 
 @Component({
     selector: 'withLatestFrom',
@@ -15,13 +8,19 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
 
     <div #box class="box">
       <div class="separation">
-
       </div>
-
       <div class="click-result">
-        {{clickResult$ | async}}
+        combineLatest:
+        {{clickResultCombine$ | async}}
       </div>
-
+      <div class="click-result">
+        withLatestFrom:
+        {{clickResultWithLatest$ | async}}
+      </div>
+      <div class="click-result">
+        zip:
+        {{clickResultZip$ | async}}
+      </div>
     </div>
 
     `,
@@ -29,16 +28,17 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
     .box {
       position: relative;
       width: 100%;
-      height: 300px;
+      height: 400px;
       border: 1px solid darkgray;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       background-color: lightcyan;
     }
 
     .separation {
-      height: 300px;
+      height: 400px;
       width: 50%;
       position: absolute;
       left: 0px;
@@ -48,7 +48,7 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
     }
 
     .click-result {
-      width: 200px;
+      width: 250px;
       height: 100px;
       line-height: 100px;
       text-align: center;
@@ -65,23 +65,41 @@ export class SolutionWithLatestFromComponent  implements AfterViewInit, OnDestro
   @ViewChild('box')
   boxViewChild;
 
-  clickResult$ = new ReplaySubject<string>(1);
+  clickResultCombine$ = new ReplaySubject<string>(1);
+  clickResultWithLatest$ = new ReplaySubject<string>(1);
+  clickResultZip$ = new ReplaySubject<string>(1);
 
   ngAfterViewInit(): void {
     const clickPosX$ = fromEvent(this.boxViewChild.nativeElement, 'click').pipe(
-      map((e) => e['offsetX'])
+      map((e) => e['offsetX']),
+      shareReplay(1)
     );
 
     const elemWith$ = fromEvent(window, 'resize').pipe(
       map(() => this.boxViewChild.nativeElement.getBoundingClientRect().width),
-      startWith(this.boxViewChild.nativeElement.getBoundingClientRect().width)
+      startWith(this.boxViewChild.nativeElement.getBoundingClientRect().width),
+      shareReplay(1)
     );
 
-    this.subscription = clickPosX$
+    this.subscription.add(
+      combineLatest([clickPosX$, elemWith$])
+      .pipe(
+        map(([posX, width]) => this.getSideOfClick(posX, width)),
+      ).subscribe(this.clickResultCombine$)
+    );
+
+    this.subscription.add(clickPosX$
       .pipe(
         withLatestFrom(elemWith$),
         map(([posX, width]) => this.getSideOfClick(posX, width))
-      ).subscribe(this.clickResult$);
+      ).subscribe(this.clickResultWithLatest$)
+    );
+
+    this.subscription.add(zip(clickPosX$, elemWith$)
+      .pipe(
+        map(([posX, width]) => this.getSideOfClick(posX, width))
+      ).subscribe(this.clickResultZip$)
+    );
 
   }
 

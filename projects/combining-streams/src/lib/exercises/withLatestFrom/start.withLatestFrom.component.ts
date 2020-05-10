@@ -12,7 +12,16 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
     </div>
 
     <div class="click-result">
-      {{clickResult$ | async}}
+      combineLatest
+      {{clickResultCombine$ | async}}
+    </div>
+    <div class="click-result">
+      withLatestFrom
+      {{clickResultWithLatest$ | async}}
+    </div>
+    <div class="click-result">
+      zip
+      {{clickResultZip$ | async}}
     </div>
 
   </div>
@@ -22,16 +31,17 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
     .box {
       position: relative;
       width: 100%;
-      height: 300px;
+      height: 400px;
       border: 1px solid darkgray;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       background-color: lightcyan;
     }
 
     .separation {
-      height: 300px;
+      height: 400px;
       width: 50%;
       position: absolute;
       left: 0px;
@@ -41,7 +51,7 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
     }
 
     .click-result {
-      width: 200px;
+      width: 250px;
       height: 100px;
       line-height: 100px;
       text-align: center;
@@ -58,7 +68,9 @@ export class StartWithLatestFromComponent implements AfterViewInit, OnDestroy {
   @ViewChild('box')
   boxViewChild;
 
-  clickResult$ = new ReplaySubject<string>(1);
+  clickResultCombine$ = new ReplaySubject<string>(1);
+  clickResultWithLatest$ = new ReplaySubject<string>(1);
+  clickResultZip$ = new ReplaySubject<string>(1);
 
   constructor() {
 
