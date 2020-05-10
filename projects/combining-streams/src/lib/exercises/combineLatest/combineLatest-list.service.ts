@@ -13,7 +13,7 @@ interface ListServiceState {
 @Injectable({
   providedIn: 'root'
 })
-export class SolutionHttpV1Service {
+export class combineLatestListService {
   private readonly baseUrl = 'api';
   private readonly itemUrl = [this.baseUrl, 'item'].join('/');
   private readonly listUrl = [this.baseUrl, 'list'].join('/');
@@ -51,7 +51,7 @@ export class SolutionHttpV1Service {
     return this.http.post<Item[]>(this.itemUrl, item);
   }
 
-  addItems(item: Pick<Item, 'iName' | 'lId'>) {
+  addItem(item: Pick<Item, 'iName' | 'lId'>) {
     this.httpPostItems(item)
       .subscribe((v) => {
         console.log(v);

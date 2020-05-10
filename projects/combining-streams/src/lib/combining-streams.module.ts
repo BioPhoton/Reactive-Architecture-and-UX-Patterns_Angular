@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CombiningStreamsContainerComponent} from "./combining-streams.container.component";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
@@ -10,9 +10,10 @@ import {MatButtonModule} from "@angular/material/button";
     CombiningStreamsContainerComponent
   ],
   imports: [
-      CommonModule,
-      MatButtonModule,
-      RouterModule.forChild(ROUTES)
+    CommonModule,
+    MatButtonModule,
+    RouterModule.forChild(ROUTES)
   ]
 })
-export class CombiningStreamsModule { }
+export class CombiningStreamsModule {
+}

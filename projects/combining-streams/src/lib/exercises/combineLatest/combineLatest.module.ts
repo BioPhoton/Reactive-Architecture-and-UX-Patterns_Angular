@@ -6,6 +6,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {SolutionCombineLatestComponent} from "combining-streams/lib/exercises/combineLatest/solution.combineLatest.component";
 import {StartCombineLatestComponent} from "combining-streams/lib/exercises/combineLatest/start.combineLatest.component";
 import {MatListModule} from "@angular/material/list";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {FormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import {MatListModule} from "@angular/material/list";
     CommonModule,
     MatButtonModule,
     MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
     RouterModule.forChild(ROUTES)
   ]
 })

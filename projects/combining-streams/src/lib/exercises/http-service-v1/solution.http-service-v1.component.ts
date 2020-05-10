@@ -2,12 +2,14 @@ import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/co
 import {forkJoin, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {JoinedItem, mergeListsAndItems} from "shared";
-import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/forkJoin-list.service";
+import {combineLatestListService} from "combining-streams/lib/exercises/combineLatest/combineLatest-list.service";
 
 
 @Component({
   selector: 'solution-custom-http-service-v1',
   template: `<h3>(Solution) custom-http-service-v1</h3>
+
+  <button (click)="listService.addItem({iName: 'new item', lId: 1})">AddItem</button>
 
   <div *ngIf="list$ | async as list">
     <mat-list>
@@ -16,23 +18,23 @@ import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/fork
       </mat-list-item>
     </mat-list>
   </div>
-
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class SolutionHttpServiceV1Component {
 
-  list$: Observable<JoinedItem[]> = forkJoin(
-    this.listService.httpGetLists(),
-    this.listService.httpGetItems()
-  )
+  list$: Observable<JoinedItem[]> = forkJoin([
+    this.listService.lists$,
+    this.listService.items$
+  ])
     .pipe(
-      map(([listsResult, itemsResult]) => mergeListsAndItems(listsResult.lists, itemsResult.items))
+      map(([list, items]) => mergeListsAndItems(list, items))
     );
 
-  constructor(private listService: ForkJoinListService) {
-
+  constructor(private listService: combineLatestListService) {
+    this.listService.refetchLists();
+    this.listService.refetchItems();
   }
 
 }

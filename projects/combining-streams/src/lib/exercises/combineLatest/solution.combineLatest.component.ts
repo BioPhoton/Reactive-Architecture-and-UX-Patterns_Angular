@@ -2,43 +2,42 @@ import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/co
 import {combineLatest, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {JoinedItem, ListService, mergeListsAndItems} from "shared";
+import {combineLatestListService} from "combining-streams/lib/exercises/combineLatest/combineLatest-list.service";
 
 
 @Component({
-    selector: 'combineLatest',
-    template: `<h3>combineLatest</h3>
+    selector: 'solution-combineLatest',
+    template: `<h3>(solution) combineLatest</h3>
 
-    <button mat-raised-button color="primary" (click)="s.refetchItems()">
-        Refresh Items
-    </button>
-    <button mat-raised-button color="primary" (click)="s.refetchLists()">
-        Refresh Lists
-    </button>
+    <mat-form-field>
+      <label>Name</label>
+      <input matInput name="iName" [(ngModel)]="iName"/>
+    </mat-form-field>
+    <button (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
 
     <div *ngIf="list$ | async as list">
-        <mat-list>
-            <mat-list-item *ngFor="let item of list">
-                {{item.iName}} - {{item.lName}}
-            </mat-list-item>
-        </mat-list>
+      <mat-list>
+        <mat-list-item *ngFor="let item of list">
+          {{item.iName}} - {{item.lName}}
+        </mat-list-item>
+      </mat-list>
     </div>
-
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
 export class SolutionCombineLatestComponent {
+  iName: string = '';
+  list$: Observable<JoinedItem[]> = combineLatest([
+    this.listService.lists$,
+    this.listService.items$
+  ])
+    .pipe(
+      map(([list, items]) => mergeListsAndItems(list, items))
+    );
 
-    list$: Observable<JoinedItem[]> = combineLatest(
-        this.s.items$,
-        this.s.lists$
-    )
-        .pipe(
-            map(([items, lists]) => mergeListsAndItems(lists, items))
-        );
-
-    constructor(public s: ListService) {
-
-    }
-
+  constructor(private listService: combineLatestListService) {
+    this.listService.refetchLists();
+    this.listService.refetchItems();
+  }
 }

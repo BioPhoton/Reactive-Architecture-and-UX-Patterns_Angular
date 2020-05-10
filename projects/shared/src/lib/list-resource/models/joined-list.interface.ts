@@ -1,6 +1,6 @@
-import {List} from "./list.interface";
-import {Item} from "./item.interface";
-
-export interface JoinedItem extends List, Item{
-
+export interface JoinedItem {
+  lId: number;
+  lName: string;
+  iId: number;
+  iName: string;
 }

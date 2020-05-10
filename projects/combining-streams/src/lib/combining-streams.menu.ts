@@ -6,12 +6,12 @@ export const MENU_ITEMS: MenuItem[] = [
     link: './forkJoin'
   },
   {
-    label: 'combineLatest',
-    link: './combineLatest'
-  },
-  {
     label: 'http service v1',
     link: './http-service-v1'
+  },
+  {
+    label: 'combineLatest',
+    link: './combineLatest'
   },
   {
     label: 'state normalisation and zip',

@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {interval, Observable} from "rxjs";
-import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/forkJoin-list.service";
+import {Observable} from "rxjs";
+import {ForkJoinListService} from "./forkJoin-list.service";
+import {JoinedItem} from "shared";
 
 @Component({
   selector: 'solution-forkJoin',
@@ -19,10 +20,13 @@ import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/fork
 })
 export class StartForkJoinComponent {
 
-  list$: Observable<any> = interval(1000);
+  list$: Observable<JoinedItem>;
+
+  // this.listService.httpGetLists(),
+  // this.listService.httpGetItems()
+  // mergeListsAndItems(lists, items)
 
   constructor(private listService: ForkJoinListService) {
-
   }
 
 }

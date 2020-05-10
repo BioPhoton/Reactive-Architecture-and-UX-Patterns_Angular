@@ -23,16 +23,14 @@ import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/fork
 })
 export class SolutionForkJoinComponent {
 
-  list$: Observable<JoinedItem[]> = forkJoin(
+  list$: Observable<JoinedItem[]> = forkJoin([
     this.listService.httpGetLists(),
     this.listService.httpGetItems()
-  )
-    .pipe(
-      map(([listsResult, itemsResult]) => mergeListsAndItems(listsResult.lists, itemsResult.items))
-    );
+  ]).pipe(
+    map(([lists, items]) => mergeListsAndItems(lists, items))
+  );
 
   constructor(private listService: ForkJoinListService) {
-
   }
 
 }

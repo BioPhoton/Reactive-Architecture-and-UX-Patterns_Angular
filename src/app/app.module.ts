@@ -10,6 +10,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {ROUTES} from "./app.routes";
 import {HttpClientModule} from "@angular/common/http";
+import {InMemoryDataModule} from "shared";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {HttpClientModule} from "@angular/common/http";
     MatSidenavModule,
     MatListModule,
     RouterModule.forRoot(ROUTES),
-    HttpClientModule
+    HttpClientModule,
+    InMemoryDataModule
   ],
   providers: [],
   bootstrap: [AppComponent]

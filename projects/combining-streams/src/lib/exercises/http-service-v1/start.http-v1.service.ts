@@ -1,61 +1,52 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import {
-  catchError,
-  delay,
-  distinctUntilChanged,
-  map
-} from 'rxjs/operators';
-import {Item, List} from "shared";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, concat, Observable, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {Item, List, upsertEntities} from "shared";
 
 interface ListServiceState {
   lists: List[];
   items: Item[];
-  loading: boolean;
-  error: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class StartHttpV1Service {
+  private readonly baseUrl = 'api';
+  private readonly itemUrl = [this.baseUrl, 'item'].join('/');
+  private readonly listUrl = [this.baseUrl, 'list'].join('/');
+
+  private readonly state$ = new BehaviorSubject<ListServiceState>({
+    lists: [] as List[],
+    items: [] as Item[]
+  });
+
+  lists$ = this.state$.pipe(map(s => s.lists));
+  items$ = this.state$.pipe(map(s => s.items));
 
   constructor(private http: HttpClient) {
 
   }
 
-  httpGetItems = (arg?: any): Observable<{ items: Item[] }> =>
-      of(getItems(arg)).pipe(
-          // tslint:disable-next-line:no-bitwise
-          delay(~~(Math.random() * 5000)),
-          map(items => ({ items }))
-      );
-
-  httpGetLists = (arg?: any): Observable<{ lists: List[] }> =>
-    of(getLists(arg)).pipe(
-      // tslint:disable-next-line:no-bitwise
-      delay(~~(Math.random() * 5000)),
-      map(lists => ({ lists }))
+  httpGetLists(): Observable<List[]> {
+    return this.http.get<List[]>(this.listUrl).pipe(
+      catchError(() => of([] as List[]))
     );
-}
+  }
 
-export function getLists(cfg = { num: 5 }): List[] {
-  // tslint:disable-next-line:no-bitwise
-  const randId = (s: string = '') => s + ~~(Math.random() * 100);
-  return new Array(cfg.num).fill(cfg.num).map(_ => ({
-    lId: randId('lid'),
-    lName: randId('lname')
-  }));
-}
+  httpPostItems(item: Pick<Item, 'iName' | 'lId'>): Observable<Item[]> {
+    return this.http.post<Item[]>(this.itemUrl, item);
+  }
 
+  addItems(item: Pick<Item, 'iName' | 'lId'>) {
+    throw new Error('not implemented');
+  }
 
-export function getItems(cfg = { num: 5 }): Item[] {
-  // tslint:disable-next-line:no-bitwise
-  const randId = (s: string = '') => s + ~~(Math.random() * 100);
-  return new Array(cfg.num).fill(cfg.num).map(_ => ({
-    iId: randId('iid'),
-    iName: randId('iname'),
-    lId:  randId('lid')
-  }));
+  httpGetItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.itemUrl).pipe(
+      catchError(() => of([] as Item[]))
+    );
+  }
+
 }
