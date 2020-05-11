@@ -43,10 +43,10 @@ and points out some interesting details.
 With that in mind, we will start to work on our first patterns.
 
 Exercises we will master are:
-- Deriving state and combination operators
+- State derivation and update behaviour
   - Overview of combination the operators
   - HTTP fetching and with `forkJoin`
-  - Avoid over-fetching by introducing state into our Http service  
+  - Avoid over-fetching by introducing state into the Http service  
   - Continuously deriving state with `combineLatest` 
   - Reduce computations and understand data normalization
   - Opt-In Updates and `withLatestFrom`
