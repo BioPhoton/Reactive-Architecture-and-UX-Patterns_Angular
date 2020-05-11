@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MENU_ITEMS} from "./state-management.menu";
 
 @Component({
-    selector: 'state-management-container',
-    template: `
+  selector: 'state-management-container',
+  template: `
         <h1>State Management</h1>
         <a mat-button *ngFor="let item of items"
                              [routerLink]="[item.link]">
@@ -12,8 +12,8 @@ import {MENU_ITEMS} from "./state-management.menu";
         <br/>
         <router-outlet></router-outlet>
     `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StateManagementContainerComponent {
-    items = MENU_ITEMS
+  items = MENU_ITEMS
 }

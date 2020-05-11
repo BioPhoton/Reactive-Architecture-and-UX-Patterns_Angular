@@ -1,6 +1,6 @@
 import {Component, Input, Output} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
-import {map, shareReplay, startWith, switchMap} from 'rxjs/operators';
+import {map, startWith, switchMap} from 'rxjs/operators';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({

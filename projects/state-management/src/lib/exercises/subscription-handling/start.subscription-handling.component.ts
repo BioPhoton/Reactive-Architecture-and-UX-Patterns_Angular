@@ -2,7 +2,6 @@ import {Component, OnDestroy} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {SourceService} from './source.service';
-import {SubscriptionHandlingService} from './subscription.service';
 
 @Component({
   selector: 'subscription-handling',
