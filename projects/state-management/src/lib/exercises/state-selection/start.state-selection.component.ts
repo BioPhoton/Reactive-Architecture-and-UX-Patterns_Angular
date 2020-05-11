@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   selector: 'state-selection',
   template: `
     <div class="case-content">
-      <form *ngIf="formGroup$ | async as formGroup" [formGroup]="formGroup">
+      <form *ngIf="derivation$ | async as formGroup" [formGroup]="formGroup">
         <mat-form-field *ngFor="let c of formGroup.controls | keyvalue">
           <label>{{ c.key }}</label>
           <input matInput [formControlName]="c.key"/>
@@ -17,29 +17,26 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   `
 })
 export class StartStateSelectionComponent {
-  state$ = new ReplaySubject(1);
+  formModel$ = new ReplaySubject(1);
 
   @Input()
   set formGroupModel(modelFromInput: { [key: string]: any }) {
     if (modelFromInput) {
-      this.state$.next(modelFromInput);
+      this.formModel$.next(modelFromInput);
     }
   }
 
-  formGroup$: Observable<FormGroup> = this.state$.pipe(
+  derivation$: Observable<FormGroup> = this.formModel$.pipe(
     startWith({}),
     map(input => this.getFormGroupFromConfig(input))
   );
 
-  @Output() formValueChange = this.formGroup$.pipe(
+  @Output()
+  formValueChange = this.derivation$.pipe(
     switchMap((fg: FormGroup) => fg.valueChanges)
   );
 
   constructor(private fb: FormBuilder) {
-  }
-
-  select(o$: Observable<any>) {
-    return o$.pipe(shareReplay(1));
   }
 
   getFormGroupFromConfig(modelFromInput) {

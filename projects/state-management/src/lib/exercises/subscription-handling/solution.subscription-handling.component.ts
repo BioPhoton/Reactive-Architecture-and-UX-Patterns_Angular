@@ -1,6 +1,5 @@
-import {Component, OnDestroy} from '@angular/core';
-import {Subject, Subscription} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {tap} from 'rxjs/operators';
 import {SourceService} from './source.service';
 import {SubscriptionHandlingService} from './subscription.service';
 
@@ -12,10 +11,7 @@ import {SubscriptionHandlingService} from './subscription.service';
   `,
   providers: [SubscriptionHandlingService]
 })
-export class SolutionSubscriptionHandlingComponent implements OnDestroy {
-  subscription = new Subscription();
-  onDestroy$ = new Subject<void>();
-
+export class SolutionSubscriptionHandlingComponent {
   process1$ = this.source.$.pipe(
     tap(num => {
       console.log('New value: ', num);
@@ -26,10 +22,8 @@ export class SolutionSubscriptionHandlingComponent implements OnDestroy {
     private source: SourceService,
     private subs: SubscriptionHandlingService
   ) {
-    this.process1$.pipe(takeUntil(this.onDestroy$)).subscribe();
+    this.subs.hold(this.process1$);
   }
 
-  ngOnDestroy(): void {
-    this.onDestroy$.next();
-  }
+
 }

@@ -9,8 +9,7 @@ import {SubscriptionHandlingService} from './subscription.service';
   template: `
     <h2>Subscription Handling</h2>
     <div class="case-content">Process running internally</div>
-  `,
-  providers: [SubscriptionHandlingService]
+  `
 })
 export class StartSubscriptionHandlingComponent implements OnDestroy {
   subscription = new Subscription();
@@ -24,7 +23,6 @@ export class StartSubscriptionHandlingComponent implements OnDestroy {
 
   constructor(
     private source: SourceService,
-    private subs: SubscriptionHandlingService
   ) {
     this.process1$.pipe(takeUntil(this.onDestroy$)).subscribe();
   }

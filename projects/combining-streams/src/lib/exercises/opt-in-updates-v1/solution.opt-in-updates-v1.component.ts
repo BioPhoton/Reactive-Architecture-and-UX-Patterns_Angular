@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {combineLatest, concat, Observable, of, Subject} from "rxjs";
+import {combineLatest, concat, Observable, Subject} from "rxjs";
 import {filter, map, shareReplay, take, withLatestFrom} from "rxjs/operators";
-import {JoinedItem, mergeListsAndItems} from "shared";
-import {optInUpdatesV1ListService} from "combining-streams/lib/exercises/opt-in-updates-v1/opt-in-updates-v1-list.service";
+import {mergeListsAndItems} from "shared";
+import {OptInUpdatesV1ListService} from "combining-streams/lib/exercises/opt-in-updates-v1/opt-in-updates-v1-list.service";
 
 @Component({
   selector: 'solution-opt-in-updates-basic',
@@ -60,7 +60,7 @@ export class SolutionOptInUpdatesV1Component {
     );
 
 
-  constructor(private listService: optInUpdatesV1ListService) {
+  constructor(public listService: OptInUpdatesV1ListService) {
     this.listService.refetchLists();
     this.listService.refetchItems();
   }

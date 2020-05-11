@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {Item, JoinedItem, List, mergeListsAndItems, upsertEntities} from "shared";
-import {StartHttpV1Service} from "combining-streams/lib/exercises/http-service-v1/start.http-v1.service";
+import {Item, List, upsertEntities} from "shared";
 import {HttpClient} from "@angular/common/http";
 
 interface ListServiceState {
@@ -13,7 +12,7 @@ interface ListServiceState {
 @Injectable({
   providedIn: 'root'
 })
-export class optInUpdatesV1ListService {
+export class OptInUpdatesV1ListService {
   private readonly baseUrl = 'api';
   private readonly itemUrl = [this.baseUrl, 'item'].join('/');
   private readonly listUrl = [this.baseUrl, 'list'].join('/');
