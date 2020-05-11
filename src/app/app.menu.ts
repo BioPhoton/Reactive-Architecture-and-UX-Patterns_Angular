@@ -8,5 +8,9 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         label: 'Combining Streams',
         link: '/combining-streams'
+    },
+    {
+        label: 'State Management',
+        link: '/state-management'
     }
 ];

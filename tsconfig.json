@@ -22,6 +22,12 @@
       "combining-streams/*": [
         "projects/combining-streams/src/*"
       ],
+      "state-management": [
+        "projects/state-management/src"
+      ],
+      "state-management/*": [
+        "projects/state-management/src/*"
+      ],
       "shared": [
         "projects/shared/src"
       ],

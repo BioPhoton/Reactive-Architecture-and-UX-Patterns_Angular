@@ -13,5 +13,9 @@ export const ROUTES = [
    {
         path: 'combining-streams',
         loadChildren: () => import('combining-streams').then(m => m.CombiningStreamsModule)
+    },
+   {
+        path: 'state-management',
+        loadChildren: () => import('state-management').then(m => m.StateManagementModule)
     }
 ];
