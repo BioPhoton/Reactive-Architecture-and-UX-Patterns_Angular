@@ -23,7 +23,6 @@
     "@angular/router": "~9.1.4",
     "@rx-angular/state": "^1.0.4",
     "angular-in-memory-web-api": "^0.10.0",
-    "lib": "^4.1.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
