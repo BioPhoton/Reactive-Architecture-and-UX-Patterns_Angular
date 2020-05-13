@@ -2,14 +2,13 @@
 
 ## Intro
 
-We want to build a simple Blog application. 
-To get things started let's display a simple list of `BlogPost`.
-There are HTTP Endpoints which provide us with `Comment` & `Post` data.
-In addition, we want to add new `BlogPost` entries to the list without having to manually reload the data.
+Since we want to build a simple Blog application, let's start with displaying a list of `BlogPost`.
+There are HTTP Endpoints available which provide us with `Comment` & `Post` data. The task will be to combine the two Endpoints in
+order to get the final list of `BlogPost`;
  
 ## Exercise
 
-Use `forkJoin` operator to combine the http calls for comments and posts.
+Use the `forkJoin` operator to combine the http calls for `Comment` & `Post`.
 You can find the methods `httpGetComments` and `httpGetPosts` in the `ForkJoinBlogService` service.
   
 After retrieving the 2 results from the `forkJoin` creation function,
@@ -39,12 +38,14 @@ interface BlogPost {
 }
 ```
 
-We start in the component with the service already implemented. 
-`toBlogPosts` function can be imported from the `shared` folder.
+This `Component` will be the starting point for you. All needed dependencies are already included.
 
 **Component**
 ```Typescript
 // start.forkJoin.component.ts 
+import {BlogPost, toBlogPosts} from 'shared';
+import {ForkJoinBlogService} from './fork-join-blog.service';
+
 
 export class StartForkJoinComponent {
   // ...

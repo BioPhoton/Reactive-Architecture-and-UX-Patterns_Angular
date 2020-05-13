@@ -1,46 +1,49 @@
 # `forkJoin` creation function - Theory
 
-`forkJoin` belongs to the group of combination operators. 
-The speciality of combining operators is the ability to process emissions from different observables together.
-In particular combination operators return an array of items where the items are
-emissions of the involved Observables in the provided order. So do `forkJoin`.
+This exercise is about combining data coming from multiple HTTP Endpoints into one single set of data.
+Combination operators or creation functions enable us to process emissions 
+from different `Observables` and transform them into a single emission while keeping the original order of events.
 
-This operator get often used to combine http requests and process a new value of the 2 results.
+In this very example we will utilize the `forkJoin` operator. 
+On first sight it is a perfect match for combining HTTP Endpoints since it waits until all
+combined operators `complete` before emitting a result.
+
+## Example
+
+The below example showcases a very simple example using the `forkJoin` operator. We make use of the `of` creation function
+since it emits and completes instantly.
 
 ```Typescript
-import {forkJoin, Observable} from "rxjs";
+import {forkJoin, of} from 'rxjs';
 
-const source1$ = of('A');
+const source1$ = of('A'); // of emits and completes instantly
 const source2$ = of(1);
 
 const result$ = forkJoin([source1$, source2$]);
 result$
-  .subscribe((results) => {
-    const result1 = results[0];
-    const result2 = results[1];
-    console.log(result1, result2);
+  .subscribe(([resultA, result1]) => { // access results in the original order
+    console.log(resultA); // 'A'
+    console.log(result1); // 1
   })        
 ```
+The visual representation of the above example:
+
 ![forkJoin http calls](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-http_michael-hladky.png)
 
-As accessing the arrays items ofer their index is not that convenient we can use Array destruction to get the results.
+## Gotcha(s)!
 
-```Typescript
-result$
-  .subscribe(([result1, result2]) => { console.log(result1, result2);})
-```
-
-Interesting to notice here is that it only returns the late emitted values of all included Observables.
+As stated above, the `forkJoin` creation function waits until every source raises a `complete` event. After that it will return
+ the very *last* value of each source. It suits perfectly fine when dealing with HTTP Requests since they `complete` on their own.
+ However, there are many situations where this behavior is unwanted. 
+ 
+ This example shows how `forkJoin` only emits the last value after all sources `completed`.
 
 ![forkJoin all complete last](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-emit-all-last_michael-hladky.png)
 
-Also, often overlooked is the fact it needs all included Observables to be completed after the value gets emitted.
-This downside often occurs when refactoring to an architecture with staty streams of values.
+ Here you can see how `forkJoin` will never emit any value, because `a$` does not `complete`.
 
 ![forkJoin no emission if not all complete](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-emit-after-all-complete_michael-hladky.png)
 
+If any of the sources raises an `error`, the result of `forkJoin` will only be the `error`.
 
-As we can see if not all included Observables complete, we never get a value out.
-
-If an included Observable errors the resulting Observable errors too.
 ![forkJoin error](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-error_michael-hladky.png)
