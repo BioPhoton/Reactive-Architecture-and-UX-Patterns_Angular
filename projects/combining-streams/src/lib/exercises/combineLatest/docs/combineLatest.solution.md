@@ -1,7 +1,5 @@
 # Combining ongoing Observables - Solution
 
-## Combining ongoing Observables
-
 Combining the http calls with the `combineLatest` operator:
 
 **Component**
