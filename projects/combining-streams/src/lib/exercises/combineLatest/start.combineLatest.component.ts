@@ -1,40 +1,40 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {combineLatest, forkJoin, NEVER, Observable} from "rxjs";
-import {JoinedItem, ListService, mergeListsAndItems} from "shared";
-import {map} from "rxjs/operators";
-import {combineLatestListService} from "combining-streams/lib/exercises/combineLatest/combineLatest-list.service";
+import { Component } from '@angular/core';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
 @Component({
-    selector: 'combineLatest',
-    template: `<h3>combineLatest</h3>
-
+  selector: 'combineLatest',
+  template: `
+    <h3>combineLatest</h3>
     <mat-form-field>
-      <label>Name</label>
-      <input matInput name="iName" [(ngModel)]="iName"/>
+      <label>Title</label>
+      <input matInput name="comment" [(ngModel)]="comment"/>
     </mat-form-field>
-    <button mat-raised-button color="primary"  (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
-
-    <div *ngIf="list$ | async as list">
+    <button mat-raised-button color="primary" (click)="listService.addPost({'title': comment})">Add Post</button>
+    <div *ngIf="blog$ | async as blog">
       <mat-list>
-        <mat-list-item *ngFor="let item of list">
-          {{item.iName}} - {{item.lName}}
+        <mat-list-item *ngFor="let post of blog">
+          <span mat-line>{{post.title}}</span>
+          <span mat-line>Comments: {{post.commentCount}}</span>
         </mat-list-item>
       </mat-list>
     </div>
-    `
+  `
 })
 export class StartCombineLatestComponent {
-  iName: string = '';
-  list$: Observable<JoinedItem[]> = forkJoin([
-    this.listService.lists$,
-    this.listService.items$
+  comment: string = '';
+
+  blog$: Observable<BlogPost[]> = forkJoin([
+    this.listService.posts$,
+    this.listService.comments$
   ])
     .pipe(
-      map(([list, items]) => mergeListsAndItems(list, items))
+      map(([posts, comments]) => mergeListsAndItems(posts, comments))
     );
 
-  constructor(public listService: combineLatestListService) {
-    this.listService.refetchLists();
-    this.listService.refetchItems();
+  constructor(public listService: BlogBasicService) {
+    this.listService.fetchPosts();
+    this.listService.fetchComments();
   }
 }

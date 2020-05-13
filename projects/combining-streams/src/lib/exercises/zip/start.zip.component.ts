@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
-import {combineLatest, Observable,} from "rxjs";
-import {JoinedItem, mergeListsAndItems} from "shared";
-import {map, tap} from "rxjs/operators";
-import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.service";
+import { Component } from '@angular/core';
+import { combineLatest, Observable, } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
 @Component({
   selector: 'zip',
@@ -10,86 +9,86 @@ import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.servi
 
   <mat-form-field>
     <label>Name</label>
-    <input matInput name="iName" [(ngModel)]="iName"/>
+    <input matInput name="comment" [(ngModel)]="comment"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addComment({'text': comment, 'postId': 1})">AddItem</button>
 
   <p><b>renders: {{renders()}}</b></p>
   <p><b>processJoinedList: {{processJoinedList()}}</b></p>
   <p><b>processLikedList: {{processLikedList()}}</b></p>
   <div class="row">
 
-    <div style="width: 49%" *ngIf="joinedList$ | async as list">
+    <div style="width: 49%" *ngIf="blog$ | async as list">
       <b>All items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of list">
-          {{item.iName}} - {{item.lName}}
+          {{item.title}} - Comments: {{item.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
 
 
-    <div style="width: 49%" *ngIf="likedItems$ | async as likedItems">
+    <div style="width: 49%" *ngIf="commentedPosts$ | async as likedItems">
       <b>Liked items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of likedItems">
-          {{item.iName}} - {{item.lName}}
+          {{item.title}} - Comments: {{item.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
 
   </div>
   `,
-  styles: [`
-    .row {
-      width: 100%;
-      display: flex;
-    }
-  `]
+  styles: [
+      `
+      .row {
+        width: 100%;
+        display: flex;
+      }
+    `
+  ]
 })
 export class StartZipComponent {
-  iName = 'my new item';
-  numRenders = 0;
-
-  renders() {
-    return ++this.numRenders
-  }
-
+  comment = 'my new item';
   numProcessJoinedList = 0;
-
-  processJoinedList() {
-    return this.numProcessJoinedList
-  }
-
+  numRenders = 0;
   numProcessLikedList = 0;
 
-  processLikedList() {
-    return this.numProcessLikedList
-  }
-
-  joinedList$ = combineLatest([
-    this.listService.lists$,
-    this.listService.items$
+  blog$ = combineLatest([
+    this.listService.posts$,
+    this.listService.comments$
   ]).pipe(
     map(([list, items]) => mergeListsAndItems(list, items)),
     tap(v => ++this.numProcessJoinedList)
   );
-  likedIds$ = this.joinedList$.pipe(map(list => list
-    .filter(i => i.liked)
-    .map(i => i.iId))
+  commentedIds$ = this.blog$.pipe(map(list => list
+    .filter(i => i.commentCount > 0)
+    .map(i => i.id))
   );
 
-  likedItems$: Observable<JoinedItem[]> = combineLatest([
-    this.joinedList$,
-    this.likedIds$
+  commentedPosts$: Observable<BlogPost[]> = combineLatest([
+    this.blog$,
+    this.commentedIds$
   ])
     .pipe(
-      map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.iId)))),
+      map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
       tap(v => ++this.numProcessLikedList)
     );
 
-  constructor(public listService: zipListService) {
-    this.listService.refetchLists();
-    this.listService.refetchItems();
+  constructor(public listService: BlogBasicService) {
+    this.listService.fetchPosts();
+    this.listService.fetchComments();
+  }
+
+  processJoinedList() {
+    return this.numProcessJoinedList;
+  }
+
+  renders() {
+    return ++this.numRenders;
+  }
+
+  processLikedList() {
+    return this.numProcessLikedList;
   }
 }

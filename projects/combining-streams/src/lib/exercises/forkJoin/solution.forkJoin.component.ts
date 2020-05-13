@@ -1,29 +1,23 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 import {forkJoin, Observable} from "rxjs";
 import {map} from "rxjs/operators";
-import {JoinedItem, mergeListsAndItems} from "shared";
+import {BlogPost, mergeListsAndItems} from "shared";
 import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/forkJoin-list.service";
 
 
 @Component({
   selector: 'forkJoin',
-  template: `<h3>(Solution) ForkJoin</h3>
-
-  <div *ngIf="list$ | async as list">
+  template: `
+    <h3>(Solution) ForkJoin</h3>
     <mat-list>
-      <mat-list-item *ngFor="let item of list">
+      <mat-list-item *ngFor="let item of list$ | async">
         {{item.iName}} - {{item.lName}}
       </mat-list-item>
-    </mat-list>
-  </div>
-
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+    </mat-list>`
 })
 export class SolutionForkJoinComponent {
 
-  list$: Observable<JoinedItem[]> = forkJoin([
+  list$: Observable<BlogPost[]> = forkJoin([
     this.listService.httpGetLists(),
     this.listService.httpGetItems()
   ]).pipe(

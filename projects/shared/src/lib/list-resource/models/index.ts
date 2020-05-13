@@ -1,3 +1,3 @@
-export * from './list.interface';
-export * from './item.interface';
-export * from './joined-list.interface';
+export * from './post.interface';
+export * from './comment.interface';
+export * from './blog-post';

@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {Item, List} from "shared";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Comment, Post } from 'shared';
 
 
 @Injectable({
@@ -17,15 +17,15 @@ export class ForkJoinListService {
 
   }
 
-  httpGetItems(): Observable<Item[]> {
-    return this.http.get<Item[]>(this.itemUrl).pipe(
-      catchError(e => of([] as Item[]))
+  httpGetItems(): Observable<Comment[]> {
+    return this.http.get<Comment[]>(this.itemUrl).pipe(
+      catchError(e => of([] as Comment[]))
     );
   }
 
-  httpGetLists(): Observable<List[]> {
-    return this.http.get<List[]>(this.listUrl).pipe(
-      catchError(e => of([] as List[]))
+  httpGetLists(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.listUrl).pipe(
+      catchError(e => of([] as Post[]))
     );
   }
 

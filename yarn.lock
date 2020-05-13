@@ -1177,10 +1177,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@rx-angular/state@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@rx-angular/state/-/state-1.0.4.tgz#b02ab90608eaf758a3053e8f2719dbeea0a85217"
-  integrity sha512-Qe57Xi25lOS82FUGSRoViJNdIG/BXZr//ksv19x/TAthp/AapcfnHY1NZPdUdkBuBdnr9AKV/hf4A+nO9IF5dQ==
+"@rx-angular/state@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@rx-angular/state/-/state-1.1.1.tgz#1b09fb8db7926048cd33213f0cd9a4f6cc349b48"
+  integrity sha512-Jj80JtYhoR1iGVd43014Ie/Mzagsr1fHsuy6qdcuQeCFunH7gdBJYdUiJFpIk0AP484cK72ZVctbJGTvvbSxVQ==
 
 "@schematics/angular@9.1.5", "@schematics/angular@~9.1.0":
   version "9.1.5"

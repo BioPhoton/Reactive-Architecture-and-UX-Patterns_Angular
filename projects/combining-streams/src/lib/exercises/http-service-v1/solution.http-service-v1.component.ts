@@ -1,20 +1,20 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {forkJoin, Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {JoinedItem, mergeListsAndItems} from "shared";
-import {combineLatestListService} from "combining-streams/lib/exercises/combineLatest/combineLatest-list.service";
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
 
 @Component({
   selector: 'solution-custom-http-service-v1',
   template: `<h3>(Solution) custom-http-service-v1</h3>
 
-  <button mat-raised-button color="primary" (click)="listService.addItem({iName: 'new item', lId: 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addPost({title: 'new post'}); refetch();">Add Post</button>
 
-  <div *ngIf="list$ | async as list">
+  <div *ngIf="blog$ | async as blog">
     <mat-list>
-      <mat-list-item *ngFor="let item of list">
-        {{item.iName}} - {{item.lName}}
+      <mat-list-item *ngFor="let post of blog">
+        <span mat-line>{{post.title}}</span>
+        <span mat-line>Comments: {{post.commentCount}}</span>
       </mat-list-item>
     </mat-list>
   </div>
@@ -24,17 +24,24 @@ import {combineLatestListService} from "combining-streams/lib/exercises/combineL
 })
 export class SolutionHttpServiceV1Component {
 
-  list$: Observable<JoinedItem[]> = forkJoin([
-    this.listService.lists$,
-    this.listService.items$
-  ])
-    .pipe(
-      map(([list, items]) => mergeListsAndItems(list, items))
-    );
+  blog$: Observable<BlogPost[]> = this.getBlogList();
 
-  constructor(public listService: combineLatestListService) {
-    this.listService.refetchLists();
-    this.listService.refetchItems();
+  constructor(public listService: BlogBasicService) {
+
+  }
+
+  refetch() {
+    this.blog$ = this.getBlogList();
+  }
+
+  private getBlogList(): Observable<BlogPost[]> {
+    return forkJoin([
+      this.listService.httpGetPosts(),
+      this.listService.httpGetComments()
+    ])
+      .pipe(
+        map(([posts, comments]) => mergeListsAndItems(posts, comments))
+      );
   }
 
 }

@@ -1,8 +1,7 @@
-import {Component} from '@angular/core';
-import {combineLatest, Observable, zip} from "rxjs";
-import {filter, map, shareReplay, tap} from "rxjs/operators";
-import {JoinedItem, mergeListsAndItems} from "shared";
-import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.service";
+import { Component } from '@angular/core';
+import { combineLatest, Observable, zip } from 'rxjs';
+import { filter, map, shareReplay, tap } from 'rxjs/operators';
+import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
 @Component({
   selector: 'solution-zip',
@@ -10,9 +9,9 @@ import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.servi
 
   <mat-form-field>
     <label>Name</label>
-    <input matInput name="iName" [(ngModel)]="iName"/>
+    <input matInput name="comment" [(ngModel)]="comment"/>
   </mat-form-field>
-  <button mat-raised-button color="primary"  (click)="listService.addItem({'iName': iName, 'lId': 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addComment({'text': comment, 'postId': 1})">AddItem</button>
 
   <p><b>renders: {{renders()}}</b></p>
   <p><b>processJoinedList: {{processJoinedList()}}</b></p>
@@ -22,53 +21,43 @@ import {zipListService} from "combining-streams/lib/exercises/zip/zip-list.servi
       <b>All items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of list">
-          {{item.iName}} - {{item.lName}}
+          {{item.title}} - Comments: {{item.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
 
-    <div style="width: 49%" *ngIf="likedItems$ | async as likedItems">
+    <div style="width: 49%" *ngIf="commentedPosts$ | async as commentedPosts">
       <b>Liked items</b>
       <mat-list>
-        <mat-list-item *ngFor="let item of likedItems">
-          {{item.iName}} - {{item.lName}}
+        <mat-list-item *ngFor="let item of commentedPosts">
+          {{item.title}} - Comments: {{item.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
   </div>
   `,
-  styles: [`
-    .row {
-      width: 100%;
-      display: flex;
-    }
-  `]
+  styles: [
+      `
+      .row {
+        width: 100%;
+        display: flex;
+      }
+    `
+  ]
 })
 export class SolutionZipComponent {
-  iName = 'my new item';
-  numRenders = 0;
-
-  renders() {
-    return ++this.numRenders
-  }
+  comment = 'my new item';
 
   numProcessJoinedList = 0;
-
-  processJoinedList() {
-    return this.numProcessJoinedList
-  }
-
+  numRenders = 0;
   numProcessLikedList = 0;
 
-  processLikedList() {
-    return this.numProcessLikedList
-  }
 
   joinedList$ = combineLatest([
-    this.listService.lists$.pipe(
+    this.listService.posts$.pipe(
       filter(l => !!l.length)
     ),
-    this.listService.items$.pipe(
+    this.listService.comments$.pipe(
       filter(l => !!l.length)
     )
   ]).pipe(
@@ -76,22 +65,34 @@ export class SolutionZipComponent {
     tap(v => ++this.numProcessJoinedList),
     shareReplay(1)
   );
-  likedIds$ = this.joinedList$.pipe(map(list => list
-    .filter(i => i.liked)
-    .map(i => i.iId))
+  commentedIds$ = this.joinedList$.pipe(map(list => list
+    .filter(i => i.commentCount > 0)
+    .map(i => i.id))
   );
 
-  likedItems$: Observable<JoinedItem[]> = zip(
+  commentedPosts$: Observable<BlogPost[]> = zip(
     this.joinedList$,
-    this.likedIds$
+    this.commentedIds$
   )
     .pipe(
-      map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.iId)))),
+      map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
       tap(v => ++this.numProcessLikedList)
     );
 
-  constructor(public listService: zipListService) {
-    this.listService.refetchLists();
-    this.listService.refetchItems();
+  constructor(public listService: BlogBasicService) {
+    this.listService.fetchPosts();
+    this.listService.fetchComments();
+  }
+
+  processJoinedList() {
+    return this.numProcessJoinedList;
+  }
+
+  renders() {
+    return ++this.numRenders;
+  }
+
+  processLikedList() {
+    return this.numProcessLikedList;
   }
 }

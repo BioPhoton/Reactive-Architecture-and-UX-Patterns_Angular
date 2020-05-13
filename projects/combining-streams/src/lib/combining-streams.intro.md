@@ -2,7 +2,7 @@
 
 ![Reactive Architecture and UX Patterns - Combining Stream and Behavior](./assets/images/Reactive-architecture-and-ux-patterns_angular_combining-streams-and-behavior_michael-hladky.png)
 
-This set of lessons are all about combination operators. 
+This set of lessons is all about combination operators. 
 As this course focuses on real-life use cases,  
 we will use these operators in the context of state derivation, data fetching and update behavior.
 
@@ -44,18 +44,45 @@ If we understand every of those "broken parts" we are intuitively able to unders
 
 Within this set of lessons we will walk through the following exercises:
 
-- [ ] We start we a simple setup where we derive data in our component directly over HTTP requests by using `forkJoin`
-  - with this architecture we realize, we quickly run into the problem of over-fetching
+- [ ] `forkJoin` -> `combineLatest`
+  - We start with a simple setup where we derive data in our component directly over HTTP requests by using `forkJoin`
+  - We notice that `forkJoin` results in too many http calls
+  - Rebuild 
 - [ ] To solve it we refactor the give HTTP service to get more control over when we fetch the data
-  - this reviles one of the special behaviours of `frokJoin` and we need to rethink it usage
+  - this reviles one of the special behaviours of `forkJoin` and we need to rethink it usage
+  - http-service-v1
 - [ ] We learn the difference of `forkJoin` and `combineLatest` 
   - this knowledge helps us to refactor the service and component.
+  - combineLatest
 - [ ] As we go we start to introduce more features into our UI
    - again we run into a problem, this time over-rendering.
-- [ ] To understand the problem we learn about the terms `Normalized` and `Denormalized` data 
-  -  by using `zip` for our calculation we are able to solve the problem of over-rendering
+   - zip
 - [ ] As it was quite technical so far we learn about `withLatestFrom` with a more playful example 
   - by doing so we understand the concept of `promary` and `secondary` streams
+  - withLatestFrom
 - [ ] With a fresh and open mine we think about those concepts in combination with a UX Pattern called `opt-in updates`
   - to give a better experience to our users we implement this pattern in our example
+  
+## Domain
+
+```Typescript
+interface Post {
+    id: string;
+    title: string;
+}
+
+interface BlogPost { 
+    id: string;
+    title: string;
+    comments: Comment[];
+    commentCount: number;
+}
+
+interface Comment {
+    id: string;
+    postId: string;
+    text: string;
+}
+```
+
 

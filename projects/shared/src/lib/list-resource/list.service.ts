@@ -8,11 +8,11 @@ import {
   filter,
   map
 } from 'rxjs/operators';
-import {Item, List} from "./models";
+import {Comment, Post} from "./models";
 
 interface ListServiceState {
-  lists: List[];
-  items: Item[];
+  lists: Post[];
+  items: Comment[];
   loading: boolean;
   error: string;
 }
@@ -45,21 +45,21 @@ export class ListService {
     this.state$.subscribe(console.log);
   }
 
-  httpGetItems(): Observable<Item[]> {
-    return this.http.get<Item[]>(this.itemUrl).pipe(
-      catchError(e => of([] as Item[]))
+  httpGetItems(): Observable<Comment[]> {
+    return this.http.get<Comment[]>(this.itemUrl).pipe(
+      catchError(e => of([] as Comment[]))
     );
   }
 
-  httpGetLists(): Observable<List[]> {
-    return this.http.get<List[]>(this.listUrl).pipe(
+  httpGetLists(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.listUrl).pipe(
     );
   }
 
   refetchLists() {
     this.state$.next({ ...this.state$.getValue(), loading: false });
     this.httpGetLists()
-        //.pipe(catchError(e => of({ error: e, loading: false, lists: [] })))
+        //.pipe(catchError(e => of({ error: e, loading: false, posts: [] })))
         .subscribe(lists => {
           return this.state$.next({
             error: '',
@@ -72,7 +72,7 @@ export class ListService {
   refetchItems() {
     this.state$.next({ ...this.state$.getValue(), loading: false });
     this.httpGetItems()
-     //   .pipe(catchError(e => of({ error: e, loading: false, items: [] })))
+     //   .pipe(catchError(e => of({ error: e, loading: false, comments: [] })))
         .subscribe(items => {
           return this.state$.next({
             error: '',

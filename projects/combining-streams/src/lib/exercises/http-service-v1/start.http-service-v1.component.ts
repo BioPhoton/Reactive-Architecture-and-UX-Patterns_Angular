@@ -1,19 +1,19 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
-import {combineLatest, forkJoin, Observable} from "rxjs";
-import {JoinedItem, mergeListsAndItems} from "shared";
-import {StartHttpV1Service} from "combining-streams/lib/exercises/http-service-v1/start.http-v1.service";
-import {map} from "rxjs/operators";
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
 @Component({
   selector: 'custom-http-service-v1',
   template: `<h3>custom-http-service-v1</h3>
 
-  <button mat-raised-button color="primary" (click)="listService.addItems({iName: 'new item', lId: 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="listService.addPost({title: 'new post'})">Add Post</button>
 
-  <div *ngIf="list$ | async as list">
+  <div *ngIf="blog$ | async as list">
     <mat-list>
       <mat-list-item *ngFor="let item of list">
-        {{item.iName}} - {{item.lName}}
+        <span mat-line>{{item.title}}</span>
+        <span mat-line>Comments: {{item.commentCount}}</span>
       </mat-list-item>
     </mat-list>
   </div>
@@ -24,14 +24,15 @@ import {map} from "rxjs/operators";
 })
 export class StartHttpServiceV1Component {
 
-  list$: Observable<JoinedItem[]> = forkJoin([
-    this.listService.httpGetLists(),
-    this.listService.httpGetItems()
-  ]).pipe(
-    map(([lists, items]) => mergeListsAndItems(lists, items))
-  );
+  blog$: Observable<BlogPost[]> = forkJoin([
+    this.listService.httpGetPosts(),
+    this.listService.httpGetComments()
+  ])
+    .pipe(
+      map(([posts, comments]) => mergeListsAndItems(posts, comments))
+    );
 
-  constructor(public listService: StartHttpV1Service) {
+  constructor(public listService: BlogBasicService) {
 
   }
 

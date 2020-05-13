@@ -21,7 +21,7 @@
     "@angular/platform-browser": "~9.1.4",
     "@angular/platform-browser-dynamic": "~9.1.4",
     "@angular/router": "~9.1.4",
-    "@rx-angular/state": "^1.0.4",
+    "@rx-angular/state": "^1.1.1",
     "angular-in-memory-web-api": "^0.10.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
