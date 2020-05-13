@@ -42,13 +42,40 @@ If we understand every of those "broken parts" we are intuitively able to unders
 
 ## Combination Operators - Exercise walk through
 
+In order to showcase the different capabilities and constraints of the combination operators we will create a very 
+simple Blog application. `Post` & `Comment` are the actual entities which can be fetched from service endpoints.
+The combination operators will be used to combine `Post` & `Comment` to `BlogPost`.
+
+```Typescript
+// entity
+interface Post {
+    id: string;
+    title: string;
+    content: string;
+}
+// entity
+interface Comment {
+    id: string;
+    postId: string;
+    text: string;
+}
+// derivation
+interface BlogPost { 
+    id: string;
+    title: string;
+    comments: Comment[];
+    commentCount: number;
+}
+```
+
 Within this set of lessons we will walk through the following exercises:
 
-- [ ] `forkJoin` -> `combineLatest`
-  - We start with a simple setup where we derive data in our component directly over HTTP requests by using `forkJoin`
-  - We notice that `forkJoin` results in too many http calls
-  - Rebuild 
-- [ ] To solve it we refactor the give HTTP service to get more control over when we fetch the data
+- [ ] `forkJoin` -> `http-service-v1`
+  - We start with a very simple list example where we derive data in our component directly over HTTP requests by using `forkJoin`
+  - List is not "reactive" in terms of "adding/updating" -> build a refetch
+  - We notice that this architecture results in HTTP over-fetching -> introduce simple state -> forkJoin vs. combineLatest
+- [ ] `combineLatest`
+  - To solve it we refactor the give HTTP service to get more control over when we fetch the data
   - this reviles one of the special behaviours of `forkJoin` and we need to rethink it usage
   - http-service-v1
 - [ ] We learn the difference of `forkJoin` and `combineLatest` 
@@ -63,26 +90,5 @@ Within this set of lessons we will walk through the following exercises:
 - [ ] With a fresh and open mine we think about those concepts in combination with a UX Pattern called `opt-in updates`
   - to give a better experience to our users we implement this pattern in our example
   
-## Domain
-
-```Typescript
-interface Post {
-    id: string;
-    title: string;
-}
-
-interface BlogPost { 
-    id: string;
-    title: string;
-    comments: Comment[];
-    commentCount: number;
-}
-
-interface Comment {
-    id: string;
-    postId: string;
-    text: string;
-}
-```
 
 

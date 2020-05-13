@@ -7,7 +7,7 @@ import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
   selector: 'custom-http-service-v1',
   template: `<h3>custom-http-service-v1</h3>
 
-  <button mat-raised-button color="primary" (click)="listService.addPost({title: 'new post'})">Add Post</button>
+  <button mat-raised-button color="primary">Add Post</button>
 
   <div *ngIf="blog$ | async as list">
     <mat-list>

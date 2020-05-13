@@ -10,9 +10,9 @@ import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 
   <mat-form-field>
     <label>Name</label>
-    <input matInput name="text" [(ngModel)]="text"/>
+    <input matInput name="text" [(ngModel)]="title"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="listService.addComment({'text': text, 'postId': 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
   <div *ngIf="blog$ | async as blog">
     <mat-list>
@@ -27,7 +27,8 @@ import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
   encapsulation: ViewEncapsulation.None
 })
 export class SolutionCombineLatestComponent {
-  text: string = '';
+  title: string = '';
+
   blog$: Observable<BlogPost[]> = combineLatest([
     this.listService.posts$,
     this.listService.comments$
@@ -37,6 +38,16 @@ export class SolutionCombineLatestComponent {
     );
 
   constructor(public listService: BlogBasicService) {
+    this.listService.fetchPosts();
+    this.listService.fetchComments();
+  }
+
+  addPost() {
+    this.listService.addPost({title: this.title});
+    this.refetch();
+  }
+
+  refetch() {
     this.listService.fetchPosts();
     this.listService.fetchComments();
   }

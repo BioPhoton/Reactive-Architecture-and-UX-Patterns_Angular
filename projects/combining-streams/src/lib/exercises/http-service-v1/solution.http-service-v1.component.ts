@@ -8,7 +8,7 @@ import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
   selector: 'solution-custom-http-service-v1',
   template: `<h3>(Solution) custom-http-service-v1</h3>
 
-  <button mat-raised-button color="primary" (click)="listService.addPost({title: 'new post'}); refetch();">Add Post</button>
+  <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
   <div *ngIf="blog$ | async as blog">
     <mat-list>
@@ -24,10 +24,15 @@ import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
 })
 export class SolutionHttpServiceV1Component {
 
-  blog$: Observable<BlogPost[]> = this.getBlogList();
+  blog$: Observable<BlogPost[]>;
 
   constructor(public listService: BlogBasicService) {
+    this.refetch();
+  }
 
+  addPost() {
+    this.listService.addPost({title: 'new post'});
+    this.refetch();
   }
 
   refetch() {

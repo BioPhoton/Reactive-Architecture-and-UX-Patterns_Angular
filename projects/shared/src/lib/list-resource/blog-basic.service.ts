@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Comment, Post, upsertEntities } from 'shared';
+import { upsertEntities } from 'shared/lib/list-resource/operations/list-operations';
+import { Post, Comment } from 'shared/lib/list-resource/models';
 
 interface BlogBasicServiceState {
   posts: Post[];
@@ -59,7 +60,7 @@ export class BlogBasicService {
     this.httpPostPost(post)
       .subscribe((v) => {
         console.log(v);
-        this.fetchPosts();
+        // this.fetchPosts();
       }, console.log);
   }
 
