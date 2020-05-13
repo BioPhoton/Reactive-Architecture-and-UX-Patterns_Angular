@@ -38,7 +38,7 @@ If any of the sources raises an `error`, it gets forwarded, and the resulting Ob
 
 ![forkJoin error](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-error_michael-hladky.png)
 
-## Gotcha(s)!
+## 💡 Gotcha(s)!
 
 As stated above, the `forkJoin` creation function waits until every source raises a `complete` event. After that it will return
  the very *last* value of each source. It suits perfectly fine when dealing with HTTP Requests since they `complete` on their own.

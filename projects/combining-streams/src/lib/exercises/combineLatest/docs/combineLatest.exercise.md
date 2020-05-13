@@ -1,5 +1,8 @@
 # Combining ongoing Observables - Exercise
 
+![](./assets/images/Reactive-architecture-and-ux-patterns_angular_over-fetching_michael-hladky.png)
+![](./assets/images/Reactive-architecture-and-ux-patterns_angular_http-caching_michael-hladky.png)
+
 ## Intro
 As processing HTTP calls directly in the component we run into "over-fetching" of data.
 Over-fetching means we request data from the server more often than we need to.

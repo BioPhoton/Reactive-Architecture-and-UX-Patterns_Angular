@@ -33,7 +33,7 @@ import { BlogBasicService, toBlogPosts } from 'shared';
   </div>
   `
 })
-export class StartOptInUpdatesV1Component {
+export class StartWithLatestFromComponent {
 
   comment = 'my new comment';
   optInListClick$ = new Subject();

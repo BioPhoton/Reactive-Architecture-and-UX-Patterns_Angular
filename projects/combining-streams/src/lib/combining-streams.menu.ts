@@ -11,7 +11,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: 'opt-in updates-v1',
-    link: './opt-in-updates-v1'
+    link: './withLatestFrom'
   },
   {
     label: 'state normalisation and zip',

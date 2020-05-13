@@ -31,4 +31,4 @@ export class SolutionForkJoinComponent {
 ## Conclusion
 
 Great! We managed to combine two http calls with the `forkJoin` operator into a single list of `BlogPost`. But what if we want to
-handle data manipulations? In a next step we refactor our architecture to a minimal http caching solution.
+handle ongoing Observables? In a next step we refactor our architecture to a minimal http caching solution.

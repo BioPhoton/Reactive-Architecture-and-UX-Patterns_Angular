@@ -31,9 +31,9 @@ export const ROUTES = [
           .then(m => m.ComparisonModule)
       },
       {
-        path: 'opt-in-updates-v1',
-        loadChildren: () => import('./exercises/opt-in-updates-v1/opt-in-updates-v1.module')
-          .then(m => m.OptInUpdatesV1Module)
+        path: 'withLatestFrom',
+        loadChildren: () => import('./exercises/withLatestFrom/withLatestFrom.module')
+          .then(m => m.WithLatestFromModule)
       }
     ]
   }
