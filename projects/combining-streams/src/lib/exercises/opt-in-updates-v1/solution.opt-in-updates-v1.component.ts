@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, concat, Observable, Subject } from 'rxjs';
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
-import { BlogBasicService, mergeListsAndItems } from 'shared';
+import { BlogBasicService, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'solution-opt-in-updates-basic',
@@ -42,7 +42,7 @@ export class SolutionOptInUpdatesV1Component {
     this.listService.posts$.pipe(filter(l => !!l.length)),
     this.listService.comments$.pipe(filter(l => !!l.length))
   ]).pipe(
-    map(([list, items]) => mergeListsAndItems(list, items)),
+    map(([list, items]) => toBlogPosts(list, items)),
     shareReplay(1)
   );
 

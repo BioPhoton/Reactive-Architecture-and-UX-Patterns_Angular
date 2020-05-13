@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
+import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'custom-http-service-v1',
@@ -29,7 +29,7 @@ export class StartHttpServiceV1Component {
     this.listService.httpGetComments()
   ])
     .pipe(
-      map(([posts, comments]) => mergeListsAndItems(posts, comments))
+      map(([posts, comments]) => toBlogPosts(posts, comments))
     );
 
   constructor(public listService: BlogBasicService) {

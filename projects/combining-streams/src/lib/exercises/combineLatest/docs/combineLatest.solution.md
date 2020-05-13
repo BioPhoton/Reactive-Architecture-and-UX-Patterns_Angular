@@ -1,5 +1,20 @@
-# CombineLatest
+# Combining ongoing Observables - Solution
 
-1. Use `combineLatest` to get lists and todos (over service `SimpleTodoService`)
-2. Use `leftJoin(lists, todos,  'lId', 'lId')`
-3. return first list
+## Combining ongoing Observables
+
+Combining the http calls with the `combineLatest` operator:
+
+**Component**
+```Typescript
+// solution.combineLatest.component.ts 
+
+blog$: Observable<BlogPost[]> = combineLatest([
+    this.blogPostService.posts$,
+    this.blogPostService.comments$
+])
+.pipe(
+  map(([posts, comments]) => toBlogPosts(posts, comments))
+);
+```
+
+With this setup we can process the list of blog posts whenever the posts, or the comments change.

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, Observable, zip } from 'rxjs';
 import { filter, map, shareReplay, tap } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
+import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'solution-zip',
@@ -61,7 +61,7 @@ export class SolutionZipComponent {
       filter(l => !!l.length)
     )
   ]).pipe(
-    map(([list, items]) => mergeListsAndItems(list, items)),
+    map(([list, items]) => toBlogPosts(list, items)),
     tap(v => ++this.numProcessJoinedList),
     shareReplay(1)
   );

@@ -1,3 +1,1 @@
-# `forkJoin` Theory
-
-## Intro
+# 

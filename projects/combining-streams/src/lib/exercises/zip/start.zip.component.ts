@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, Observable, } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
+import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'zip',
@@ -58,7 +58,7 @@ export class StartZipComponent {
     this.listService.posts$,
     this.listService.comments$
   ]).pipe(
-    map(([list, items]) => mergeListsAndItems(list, items)),
+    map(([list, items]) => toBlogPosts(list, items)),
     tap(v => ++this.numProcessJoinedList)
   );
   commentedIds$ = this.blog$.pipe(map(list => list

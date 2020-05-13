@@ -35,19 +35,19 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
       border: 1px solid darkgray;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-around;
       flex-direction: column;
-      background-color: lightcyan;
+      background-color: #3E4F85;
     }
 
     .separation {
       height: 400px;
-      width: 50%;
+      width: calc(50% - 1px);
       position: absolute;
       left: 0px;
       z-index: 0;
-      border-right: 1px solid darkgray;
-      background-color: lightgray;
+      border-right: 3px solid #2B295F;
+      background-color: #EF407E;
     }
 
     .click-result {
@@ -56,13 +56,14 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
       line-height: 100px;
       text-align: center;
       background-color: white;
-      border: 1px solid darkgray;
+      color: #2B295F;
+      border: 1px solid #2B295F;
       font-size: 20px;
       z-index: 1;
     }
   `]
 })
-export class StartWithLatestFromComponent implements AfterViewInit, OnDestroy {
+export class StartComparisonComponent implements AfterViewInit, OnDestroy {
   subscription = new Subscription();
 
   @ViewChild('box')

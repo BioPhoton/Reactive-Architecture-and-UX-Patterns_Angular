@@ -1,30 +1,34 @@
-import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
+import {Component} from '@angular/core';
 import {forkJoin, Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {BlogPost, mergeListsAndItems} from "shared";
-import {ForkJoinListService} from "combining-streams/lib/exercises/forkJoin/forkJoin-list.service";
+import {map, tap} from "rxjs/operators";
+import {BlogPost, toBlogPosts} from "shared";
+import {ForkJoinBlogService} from "./fork-join-blog.service";
 
 
 @Component({
-  selector: 'forkJoin',
+  selector: 'solution-forkJoin',
   template: `
-    <h3>(Solution) ForkJoin</h3>
-    <mat-list>
-      <mat-list-item *ngFor="let item of list$ | async">
-        {{item.iName}} - {{item.lName}}
-      </mat-list-item>
-    </mat-list>`
+    <h1>(Solution) forkJoin</h1>
+    <div *ngIf="blog$ | async as list">
+      <mat-list>
+        <mat-list-item *ngFor="let item of list">
+          <span mat-line>{{item.title}}</span>
+          <span mat-line>Comments: {{item.commentCount}}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  `
 })
 export class SolutionForkJoinComponent {
 
-  list$: Observable<BlogPost[]> = forkJoin([
-    this.listService.httpGetLists(),
-    this.listService.httpGetItems()
+  blog$: Observable<BlogPost[]> = forkJoin([
+    this.blogPostService.httpGetPosts().pipe(tap(console.log)),
+    this.blogPostService.httpGetComments()
   ]).pipe(
-    map(([lists, items]) => mergeListsAndItems(lists, items))
+    map(([posts, blog]) => toBlogPosts(posts, blog))
   );
 
-  constructor(private listService: ForkJoinListService) {
+  constructor(private blogPostService: ForkJoinBlogService) {
   }
 
 }

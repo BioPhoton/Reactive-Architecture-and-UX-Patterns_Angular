@@ -24,8 +24,8 @@ export class BlogBasicService {
     comments: [] as Comment[]
   });
 
-  posts$ = this.state$.pipe(map(s => s.posts));
-  comments$ = this.state$.pipe(map(s => s.comments));
+  readonly posts$ = this.state$.pipe(map(s => s.posts));
+  readonly comments$ = this.state$.pipe(map(s => s.comments));
 
   constructor(private http: HttpClient) {
 
@@ -34,8 +34,7 @@ export class BlogBasicService {
   fetchPosts() {
     this.httpGetPosts()
       .subscribe(posts => {
-        console.log('upsert:', upsertEntities(this.state$.getValue().posts, posts, 'id'));
-        this.state$.next({
+       this.state$.next({
           ...this.state$.getValue(),
           posts: upsertEntities(this.state$.getValue().posts, posts, 'id')
         });
@@ -48,12 +47,12 @@ export class BlogBasicService {
     );
   }
 
-  httpPostComment(item: Pick<Comment, 'text' | 'postId'>): Observable<Comment[]> {
-    return this.http.post<Comment[]>(this.commentUrl, item);
+  httpPostComment(item: Pick<Comment, 'text' | 'postId'>): Observable<Comment> {
+    return this.http.post<Comment>(this.commentUrl, item);
   }
 
-  httpPostPost(post: Pick<Post, 'title'>): Observable<Post[]> {
-    return this.http.post<Post[]>(this.postUrl, post);
+  httpPostPost(post: Pick<Post, 'title'>): Observable<Post> {
+    return this.http.post<Post>(this.postUrl, post);
   }
 
   addPost(post: Pick<Post, 'title'>) {
@@ -74,17 +73,17 @@ export class BlogBasicService {
 
   fetchComments() {
     this.httpGetComments()
-      .subscribe(comments => {
+      .subscribe(comment => {
         this.state$.next({
           ...this.state$.getValue(),
-          comments: upsertEntities(this.state$.getValue().comments, comments, 'id')
+          comments: upsertEntities(this.state$.getValue().comments, [comment], 'id')
         });
       });
   }
 
-  httpGetComments(): Observable<Comment[]> {
-    return this.http.get<Comment[]>(this.commentUrl).pipe(
-      catchError(() => of([] as Comment[]))
+  httpGetComments(): Observable<Comment> {
+    return this.http.get<Comment>(this.commentUrl).pipe(
+      catchError(() => of({} as Comment))
     );
   }
 }

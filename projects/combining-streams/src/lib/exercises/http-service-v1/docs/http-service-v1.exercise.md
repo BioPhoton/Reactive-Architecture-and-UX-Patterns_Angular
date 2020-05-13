@@ -12,7 +12,7 @@ In addition, we want to add new `BlogPost` entries to the list without having to
 - Use `forkJoin` operator to combine the http calls
 - Implement automatic re-fetching after adding a `BlogPost`
   
-  
+
 ## Interfaces
 
 ```Typescript

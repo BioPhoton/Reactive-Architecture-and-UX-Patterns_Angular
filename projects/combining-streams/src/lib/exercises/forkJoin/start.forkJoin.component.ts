@@ -1,26 +1,30 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 import {Observable} from "rxjs";
-import {ForkJoinListService} from "./forkJoin-list.service";
-import {BlogPost} from "shared";
+import {ForkJoinBlogService} from "./fork-join-blog.service";
+import {BlogPost, toBlogPosts} from "shared";
 
 @Component({
   selector: 'solution-forkJoin',
   template: `
-    <h3>forkJoin</h3>
-    <mat-list>
-      <mat-list-item *ngFor="let item of list$ | async">
-        {{item.iName}} - {{item.lName}}
-      </mat-list-item>
-    </mat-list>
+    <h1>forkJoin</h1>
+    <div *ngIf="blog$ | async as list">
+      <mat-list>
+        <mat-list-item *ngFor="let item of list">
+          <span mat-line>{{item.title}}</span>
+          <span mat-line>Comments: {{item.commentCount}}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class StartForkJoinComponent {
 
-  list$: Observable<BlogPost>;
+  blog$: Observable<BlogPost[]>;
 
-  constructor(private listService: ForkJoinListService) {
+  constructor(private blogPostService: ForkJoinBlogService) {
+
   }
 
 }

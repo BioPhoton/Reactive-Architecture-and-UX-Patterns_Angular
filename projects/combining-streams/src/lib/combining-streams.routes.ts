@@ -26,9 +26,9 @@ export const ROUTES = [
           .then(m => m.ZipModule)
       },
       {
-        path: 'withLatestFrom',
-        loadChildren: () => import('./exercises/withLatestFrom/withLatestFrom.module')
-          .then(m => m.WithLatestFromModule)
+        path: 'comparison',
+        loadChildren: () => import('./exercises/comparison/comparison.module')
+          .then(m => m.ComparisonModule)
       },
       {
         path: 'opt-in-updates-v1',

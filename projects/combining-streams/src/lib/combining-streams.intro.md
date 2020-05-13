@@ -36,7 +36,7 @@ I named it that way because it borrows concepts and thinking from one of the bro
 Understanding the different operators in terms of their "broken parts" is unequally more efficient and intuitive than learning them one by one based on their name.
 
 The list of broken parts from the above set looks like this:
-`combineLatest`, `forkJoin`, `zip`, `withLatestFrom`, `With`, `All` 
+`combineLatest`, `zip`, `withLatestFrom`, `With`, `All` 
 
 If we understand every of those "broken parts" we are intuitively able to understand their "reunion", meaning the operators itself.
 
@@ -72,8 +72,7 @@ Within this set of lessons we will walk through the following exercises:
 
 - [ ] `forkJoin` -> `http-service-v1`
   - We start with a very simple list example where we derive data in our component directly over HTTP requests by using `forkJoin`
-  - List is not "reactive" in terms of "adding/updating" -> build a refetch
-  - We notice that this architecture results in HTTP over-fetching -> introduce simple state -> forkJoin vs. combineLatest
+  - We notice that this architecture results in HTTP over-fetching -> introduce simple http caching -> forkJoin vs. combineLatest
 - [ ] `combineLatest`
   - To solve it we refactor the give HTTP service to get more control over when we fetch the data
   - this reviles one of the special behaviours of `forkJoin` and we need to rethink it usage

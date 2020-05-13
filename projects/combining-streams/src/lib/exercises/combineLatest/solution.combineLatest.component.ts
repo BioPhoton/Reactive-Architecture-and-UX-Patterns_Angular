@@ -1,54 +1,43 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
+import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
+import {combineLatest, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {BlogPost, toBlogPosts} from 'shared';
+import {CombineLatestBlogService} from "combining-streams/lib/exercises/combineLatest/combine-latest-blog.service";
 
 
 @Component({
   selector: 'solution-combineLatest',
-  template: `<h3>(solution) combineLatest</h3>
+  template: `
+    <h1>(Solution) combineLatest</h1>
+    <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
-  <mat-form-field>
-    <label>Name</label>
-    <input matInput name="text" [(ngModel)]="title"/>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
-
-  <div *ngIf="blog$ | async as blog">
-    <mat-list>
-      <mat-list-item *ngFor="let post of blog">
-        <span mat-line>{{post.title}}</span>
-        <span mat-line>Comments: {{post.commentCount}}</span>
-      </mat-list-item>
-    </mat-list>
-  </div>
+    <div *ngIf="blog$ | async as list">
+      <mat-list>
+        <mat-list-item *ngFor="let item of list">
+          <span mat-line>{{item.title}}</span>
+          <span mat-line>Comments: {{item.commentCount}}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class SolutionCombineLatestComponent {
-  title: string = '';
-
   blog$: Observable<BlogPost[]> = combineLatest([
-    this.listService.posts$,
-    this.listService.comments$
+    this.blogPostService.posts$,
+    this.blogPostService.comments$
   ])
     .pipe(
-      map(([posts, comments]) => mergeListsAndItems(posts, comments))
+      map(([posts, comments]) => toBlogPosts(posts, comments))
     );
 
-  constructor(public listService: BlogBasicService) {
-    this.listService.fetchPosts();
-    this.listService.fetchComments();
+  constructor(public blogPostService: CombineLatestBlogService) {
+
   }
 
   addPost() {
-    this.listService.addPost({title: this.title});
-    this.refetch();
+    this.blogPostService.addPost({title: 'New post'});
   }
 
-  refetch() {
-    this.listService.fetchPosts();
-    this.listService.fetchComments();
-  }
 }

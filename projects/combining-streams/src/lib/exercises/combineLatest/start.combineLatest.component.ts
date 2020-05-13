@@ -1,52 +1,40 @@
-import { Component } from '@angular/core';
-import { combineLatest, forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, mergeListsAndItems } from 'shared';
+import {Component} from '@angular/core';
+import {forkJoin, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import { BlogPost, toBlogPosts} from 'shared';
+import {CombineLatestBlogService} from "./combine-latest-blog.service";
 
 @Component({
   selector: 'combineLatest',
   template: `
-    <h3>combineLatest</h3>
-    <mat-form-field>
-      <label>Title</label>
-      <input matInput name="title" [(ngModel)]="title"/>
-    </mat-form-field>
+    <h1>combineLatest</h1>
     <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
-    <div *ngIf="blog$ | async as blog">
+
+    <div *ngIf="blog$ | async as list">
       <mat-list>
-        <mat-list-item *ngFor="let post of blog">
-          <span mat-line>{{post.title}}</span>
-          <span mat-line>Comments: {{post.commentCount}}</span>
+        <mat-list-item *ngFor="let item of list">
+          <span mat-line>{{item.title}}</span>
+          <span mat-line>Comments: {{item.commentCount}}</span>
         </mat-list-item>
       </mat-list>
     </div>
   `
 })
 export class StartCombineLatestComponent {
-  title: string = '';
+  blog$: Observable<BlogPost[]> = forkJoin([
+    this.blogPostService.httpGetPosts(),
+    this.blogPostService.httpGetComments()
+  ])
+    .pipe(
+      map(([posts, comments]) => toBlogPosts(posts, comments))
+    );
 
-  blog$: Observable<BlogPost[]>;
+  constructor(public blogPostService: CombineLatestBlogService) {
 
-  constructor(public listService: BlogBasicService) {
-    this.refetch();
   }
 
   addPost() {
-    this.listService.addPost({title: this.title});
-    this.refetch();
+    this.blogPostService.addPost({title: 'new post'});
   }
 
-  refetch() {
-    this.blog$ = this.getBlogList();
-  }
-
-  private getBlogList(): Observable<BlogPost[]> {
-    return forkJoin([
-      this.listService.posts$,
-      this.listService.comments$
-    ])
-      .pipe(
-        map(([posts, comments]) => mergeListsAndItems(posts, comments))
-      );
-  }
 }
