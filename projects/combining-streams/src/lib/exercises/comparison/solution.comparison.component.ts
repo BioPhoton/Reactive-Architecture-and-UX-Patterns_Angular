@@ -3,25 +3,28 @@ import {combineLatest, fromEvent, ReplaySubject, Subscription, zip} from "rxjs";
 import {map, shareReplay, startWith, tap, withLatestFrom} from "rxjs/operators";
 
 @Component({
-  selector: 'withLatestFrom',
-  template: `<h3>(Solution) withLatestFrom</h3>
+  selector: 'solution-comparison',
+  template: `
+    <h1>(Solution) Comparison combination operators</h1>
 
-  <div #box class="box">
-    <div class="separation">
+    <div #box class="box">
+      <div class="click-area"></div>
+      <div class="separation"></div>
+      <div class="click-pos">&nbsp;</div>
+
+      <div class="click-result">
+        combineLatest:
+        <b>{{clickResultCombine$ | async}}</b>
+      </div>
+      <div class="click-result">
+        withLatestFrom:
+        <b>{{clickResultWithLatest$ | async}}</b>
+      </div>
+      <div class="click-result">
+        zip:
+        <b>{{clickResultZip$ | async}}</b>
+      </div>
     </div>
-    <div class="click-result">
-      combineLatest:
-      <b>{{clickResultCombine$ | async}}</b>
-    </div>
-    <div class="click-result">
-      withLatestFrom:
-      <b>{{clickResultWithLatest$ | async}}</b>
-    </div>
-    <div class="click-result">
-      zip:
-      <b>{{clickResultZip$ | async}}</b>
-    </div>
-  </div>
 
   `,
   styleUrls: ['./comparison.component.scss']

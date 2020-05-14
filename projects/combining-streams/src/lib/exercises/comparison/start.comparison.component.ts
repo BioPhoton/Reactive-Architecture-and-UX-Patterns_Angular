@@ -3,28 +3,28 @@ import {fromEvent, ReplaySubject, Subscription} from "rxjs";
 import {map, tap} from "rxjs/operators";
 
 @Component({
-  selector: 'withLatestFrom',
-  template: `<h3>withLatestFrom</h3>
+  selector: 'comparison',
+  template: `
+    <h1>Comparison combination operators</h1>
 
-  <div #box class="box">
-    <div class="click-area"></div>
-    <div class="separation"></div>
+    <div #box class="box">
+      <div class="click-area"></div>
+      <div class="separation"></div>
+      <div class="click-pos">&nbsp;</div>
 
-    <div class="click-pos">&nbsp;</div>
-
-    <div class="click-result">
-      combineLatest
-      {{clickResultCombine$ | async}}
+      <div class="click-result">
+        combineLatest
+        {{clickResultCombine$ | async}}
+      </div>
+      <div class="click-result">
+        withLatestFrom
+        {{clickResultWithLatest$ | async}}
+      </div>
+      <div class="click-result">
+        zip
+        {{clickResultZip$ | async}}
+      </div>
     </div>
-    <div class="click-result">
-      withLatestFrom
-      {{clickResultWithLatest$ | async}}
-    </div>
-    <div class="click-result">
-      zip
-      {{clickResultZip$ | async}}
-    </div>
-  </div>
   `,
   styleUrls: ['./comparison.component.scss']
 })

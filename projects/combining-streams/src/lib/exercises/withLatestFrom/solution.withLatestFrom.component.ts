@@ -4,7 +4,7 @@ import {filter, map, shareReplay, take, withLatestFrom} from 'rxjs/operators';
 import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
 @Component({
-  selector: 'solution-opt-in-updates-basic',
+  selector: 'solution-with-latest-from',
   template: `
     <h1>(Solution) with-latest-from</h1>
 
