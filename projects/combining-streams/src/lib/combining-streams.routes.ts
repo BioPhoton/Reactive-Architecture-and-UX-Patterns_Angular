@@ -16,11 +16,6 @@ export const ROUTES = [
           .then(m => m.CombineLatestModule)
       },
       {
-        path: 'http-service-v1',
-        loadChildren: () => import('./exercises/http-service-v1/http-service-v1.module')
-          .then(m => m.HttpServiceV1Module)
-      },
-      {
         path: 'zip',
         loadChildren: () => import('./exercises/zip/zip.module')
           .then(m => m.ZipModule)

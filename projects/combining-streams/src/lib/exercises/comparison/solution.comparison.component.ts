@@ -1,66 +1,32 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {combineLatest, fromEvent, ReplaySubject, Subscription, zip} from "rxjs";
 import {map, shareReplay, startWith, tap, withLatestFrom} from "rxjs/operators";
 
 @Component({
-    selector: 'withLatestFrom',
-    template: `<h3>(Solution) withLatestFrom</h3>
+  selector: 'withLatestFrom',
+  template: `<h3>(Solution) withLatestFrom</h3>
 
-    <div #box class="box">
-      <div class="separation">
-      </div>
-      <div class="click-result">
-        combineLatest:
-        <b>{{clickResultCombine$ | async}}</b>
-      </div>
-      <div class="click-result">
-        withLatestFrom:
-        <b>{{clickResultWithLatest$ | async}}</b>
-      </div>
-      <div class="click-result">
-        zip:
-        <b>{{clickResultZip$ | async}}</b>
-      </div>
+  <div #box class="box">
+    <div class="separation">
     </div>
+    <div class="click-result">
+      combineLatest:
+      <b>{{clickResultCombine$ | async}}</b>
+    </div>
+    <div class="click-result">
+      withLatestFrom:
+      <b>{{clickResultWithLatest$ | async}}</b>
+    </div>
+    <div class="click-result">
+      zip:
+      <b>{{clickResultZip$ | async}}</b>
+    </div>
+  </div>
 
-    `,
-  styles: [`
-    .box {
-      position: relative;
-      width: 100%;
-      height: 400px;
-      border: 1px solid darkgray;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex-direction: column;
-      background-color: #3E4F85;
-    }
-
-    .separation {
-      height: 400px;
-      width: calc(50% - 1px);
-      position: absolute;
-      left: 0px;
-      z-index: 0;
-      border-right: 3px solid #2B295F;
-      background-color: #EF407E;
-    }
-
-    .click-result {
-      width: 250px;
-      height: 100px;
-      line-height: 100px;
-      text-align: center;
-      background-color: white;
-      color: #2B295F;
-      border: 1px solid #2B295F;
-      font-size: 20px;
-      z-index: 1;
-    }
-  `]
+  `,
+  styleUrls: ['./comparison.component.scss']
 })
-export class SolutionComparisonComponent  implements AfterViewInit, OnDestroy {
+export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
   subscription = new Subscription();
 
   @ViewChild('box')
@@ -70,8 +36,17 @@ export class SolutionComparisonComponent  implements AfterViewInit, OnDestroy {
   clickResultWithLatest$ = new ReplaySubject<string>(1);
   clickResultZip$ = new ReplaySubject<string>(1);
 
+  constructor(private elemRef: ElementRef) {
+  }
+
   ngAfterViewInit(): void {
     const clickPosX$ = fromEvent(this.boxViewChild.nativeElement, 'click').pipe(
+      tap((e: any) => {
+        const elem = this.elemRef.nativeElement.querySelector('.click-pos');
+        elem.style.top = `${e.offsetY - 15}px`;
+        elem.style.left = `${e.offsetX - 15}px`;
+        elem.style.display = 'block';
+      }),
       map((e) => e['offsetX']),
       shareReplay(1)
     );
@@ -84,9 +59,9 @@ export class SolutionComparisonComponent  implements AfterViewInit, OnDestroy {
 
     this.subscription.add(
       combineLatest([clickPosX$, elemWith$])
-      .pipe(
-        map(([posX, width]) => this.getSideOfClick(posX, width)),
-      ).subscribe(this.clickResultCombine$)
+        .pipe(
+          map(([posX, width]) => this.getSideOfClick(posX, width)),
+        ).subscribe(this.clickResultCombine$)
     );
 
     this.subscription.add(clickPosX$

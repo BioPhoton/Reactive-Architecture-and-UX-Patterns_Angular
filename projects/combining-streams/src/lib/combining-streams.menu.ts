@@ -10,20 +10,15 @@ export const MENU_ITEMS: MenuItem[] = [
     link: './combineLatest'
   },
   {
-    label: 'opt-in updates-v1',
+    label: 'withLatestFrom',
     link: './withLatestFrom'
   },
   {
-    label: 'state normalisation and zip',
+    label: 'zip',
     link: './zip'
   },
   {
     label: 'comparison',
     link: './comparison'
-  },
-
-  {
-    label: 'http service v1',
-    link: './http-service-v1'
-  },
+  }
 ];

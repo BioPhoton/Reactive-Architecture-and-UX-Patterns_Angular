@@ -1,15 +1,16 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {fromEvent, ReplaySubject, Subject, Subscription} from "rxjs";
-import {map, startWith, withLatestFrom} from "rxjs/operators";
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {fromEvent, ReplaySubject, Subscription} from "rxjs";
+import {map, tap} from "rxjs/operators";
 
 @Component({
   selector: 'withLatestFrom',
   template: `<h3>withLatestFrom</h3>
 
   <div #box class="box">
-    <div class="separation">
+    <div class="click-area"></div>
+    <div class="separation"></div>
 
-    </div>
+    <div class="click-pos">&nbsp;</div>
 
     <div class="click-result">
       combineLatest
@@ -23,45 +24,9 @@ import {map, startWith, withLatestFrom} from "rxjs/operators";
       zip
       {{clickResultZip$ | async}}
     </div>
-
   </div>
-
   `,
-  styles: [`
-    .box {
-      position: relative;
-      width: 100%;
-      height: 400px;
-      border: 1px solid darkgray;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex-direction: column;
-      background-color: #3E4F85;
-    }
-
-    .separation {
-      height: 400px;
-      width: calc(50% - 1px);
-      position: absolute;
-      left: 0px;
-      z-index: 0;
-      border-right: 3px solid #2B295F;
-      background-color: #EF407E;
-    }
-
-    .click-result {
-      width: 250px;
-      height: 100px;
-      line-height: 100px;
-      text-align: center;
-      background-color: white;
-      color: #2B295F;
-      border: 1px solid #2B295F;
-      font-size: 20px;
-      z-index: 1;
-    }
-  `]
+  styleUrls: ['./comparison.component.scss']
 })
 export class StartComparisonComponent implements AfterViewInit, OnDestroy {
   subscription = new Subscription();
@@ -73,12 +38,18 @@ export class StartComparisonComponent implements AfterViewInit, OnDestroy {
   clickResultWithLatest$ = new ReplaySubject<string>(1);
   clickResultZip$ = new ReplaySubject<string>(1);
 
-  constructor() {
+  constructor(private elemRef: ElementRef) {
 
   }
 
   ngAfterViewInit(): void {
     const clickPosX$ = fromEvent(this.boxViewChild.nativeElement, 'click').pipe(
+      tap((e: any) => {
+        const elem = this.elemRef.nativeElement.querySelector('.click-pos');
+        elem.style.top = `${e.offsetY - 15}px`;
+        elem.style.left = `${e.offsetX - 15}px`;
+        elem.style.display = 'block';
+      }),
       map((e) => e['offsetX'])
     );
     this.subscription.add(
@@ -95,8 +66,7 @@ export class StartComparisonComponent implements AfterViewInit, OnDestroy {
 
   }
 
-
-  getSideOfClick(posX: number, width: number) {
+  getSideOfClick(posX: number, width: number): string {
     return (width / 2) < posX ? 'Right' : 'Left';
   }
 

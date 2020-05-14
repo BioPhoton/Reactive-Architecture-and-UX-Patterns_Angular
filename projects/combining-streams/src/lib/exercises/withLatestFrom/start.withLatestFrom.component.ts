@@ -4,8 +4,9 @@ import { filter, map, shareReplay } from 'rxjs/operators';
 import { BlogBasicService, toBlogPosts } from 'shared';
 
 @Component({
-  selector: 'opt-in-updates',
-  template: `<h3>Opt-in Updates</h3>
+  selector: 'with-latest-from',
+  template: `
+    <h1>withLatestFrom</h1>
 
   <mat-form-field>
     <label>Name</label>
