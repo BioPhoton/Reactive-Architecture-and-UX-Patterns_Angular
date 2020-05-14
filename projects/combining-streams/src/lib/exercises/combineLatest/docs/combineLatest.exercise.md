@@ -1,18 +1,21 @@
 # Combining ongoing Observables - Exercise
 
+## Intro
+Processing HTTP calls directly in the component without any caching approaches will quickly result in _over-fetching_.
+We request data from the server more often than we need to.
+
+_Over-fetching HTTP requests visualized_
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_over-fetching_michael-hladky.png)
+
+This is a result of wrong state-management. To face this problem, we need to store the results of the HTTP Requests in
+a shared cache. We can put this behavior inside a `Service` in order to share our state accross multiple `Components`.
+
+_Shared data store visualized_
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_http-caching_michael-hladky.png)
 
-## Intro
-As processing HTTP calls directly in the component we run into "over-fetching" of data.
-Over-fetching means we request data from the server more often than we need to.
-
-This is a result of wrong state-management. 
-We need the result of the HTTP request on a global level in the service.
-From there, HTTP result can be cached, share with multiple components and replayed from the cache if needed.
- 
-To do so, we implemented a BehaviorSubject in our service as well as 
-some new methods to update the services state.
+For this exercise we introduce a very basic HTTP cache solution by using a `BehaviorSubject` as a shared data store. Instead
+of binding `Components` directly to HTTP Requests, we will feed the data store with the results and provide
+ single shared `Observables` mapped from the data store. 
 
 **Service**
 ```Typescript
@@ -23,37 +26,40 @@ private readonly state$ = new BehaviorSubject<BlogServiceState>({
     comments: [] as Comment[]
 }); 
 
-readonly posts$ = this.state$.pipe(map(s => s.posts));
-readonly comments$ = this.state$.pipe(map(s => s.comments));
+readonly posts$ = this.state$.pipe(map(s => s.posts)); // shared and replayed observable posts
+readonly comments$ = this.state$.pipe(map(s => s.comments)); // shared and replayed observable comments
 
 // ...
 
 fetchPosts() {
-this.httpGetPosts()
-  .subscribe(posts => {
-    this.state$.next({
-      ...this.state$.getValue(),
-      posts: upsertEntities(this.state$.getValue().posts, posts, 'id')
-    });
-  });
+    this.httpGetPosts()
+      .subscribe(posts => {
+        this.state$.next({
+          ...this.state$.getValue(),
+          posts: upsertEntities(this.state$.getValue().posts, posts, 'id')
+        });
+      });
 }
 
 fetchComments() {
-this.httpGetComments()
-  .subscribe(comments => {
-    this.state$.next({
-      ...this.state$.getValue(),
-      comments: upsertEntities(this.state$.getValue().comments, comments, 'id')
-    });
-  });
+    this.httpGetComments()
+      .subscribe(comments => {
+        this.state$.next({
+          ...this.state$.getValue(),
+          comments: upsertEntities(this.state$.getValue().comments, comments, 'id')
+        });
+      });
 }
 
 addPost(post: Pick<Post, 'title'>) {
-this.httpPostPost(post)
-  .subscribe((v) => {
-    console.log(v);
-    // this.fetchPosts();
-  }, console.log);
+    this.httpPostPost(post)
+      .subscribe((newPost) => {
+        console.log('saved ', newPost , 'to the server');
+        this.state$.next({
+          ...this.state$.getValue(),
+          posts: upsertEntities(this.state$.getValue().posts, [newPost], 'id')
+        })
+      }, console.log);
 }
 ```
 
@@ -72,16 +78,18 @@ constructor(...) {
 
 ## Exercise
 
-Use the properties `posts$` and `comments$` instead of `httpGetPosts` and `httpGetComments`.
+Eliminate the HTTP requests from the `Component` by making use of the shared Observables `posts$` and `comments$`.
+Even though the data in our store gets updated properly, the `Component` won't be able to display the list of
+`BlogPost` anymore.
+This is because `posts$` and `comments$` do not `complete`. Since `forkJoin` relies on its sources to complete, it won't 
+emit any value.
 
-If you click the "add post" button you will notice the calculated blog posts don't emit anymore.
+We need to replace `forkJoin` with an operator that matches the new requirements. 
 
-This is because our new streams do not complete anymore, but forkJoin needs all included Observables to complete to emit a value.
-
-We need to replace `forkJoin` with an operator that allows to process the values of running Observables. 
-
-In this case `combineLatest` is a perfect match. 
+`combineLatest` is perfectly suited for this case. 
 Use it and see if the list of BlogPosts renders now.
+
+Try adding a new `Post` using the "Add Post" button. ??
 
 
 
