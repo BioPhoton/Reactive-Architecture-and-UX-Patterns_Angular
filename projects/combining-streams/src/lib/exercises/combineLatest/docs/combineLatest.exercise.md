@@ -89,7 +89,8 @@ We need to replace `forkJoin` with an operator that matches the new requirements
 `combineLatest` is perfectly suited for this case. 
 Use it and see if the list of BlogPosts renders now.
 
-Try adding a new `Post` using the "Add Post" button. ??
+Additionally, use the provided `addPost()` method and implement a way to add new `BlogPost` to the list.
+If done correctly, the list of `BlogPost` should update instantly after adding a new entity.
 
 
 

@@ -14,30 +14,6 @@ You can find the methods `httpGetComments` and `httpGetPosts` in the `ForkJoinBl
 After retrieving the 2 results from the `forkJoin` creation function,
 we use the `map` operator to calculate the new list of `BlogPost` with `toBlogPosts`.
 
-
-**Interfaces**
-```Typescript
-// entity
-interface Post {
-    id: string;
-    title: string;
-    content: string;
-}
-// entity
-interface Comment {
-    id: string;
-    postId: string;
-    text: string;
-}
-// derivation
-interface BlogPost { 
-    id: string;
-    title: string;
-    comments: Comment[];
-    commentCount: number;
-}
-```
-
 This `Component` will be the starting point for you. All needed dependencies are already included.
 
 **Component**

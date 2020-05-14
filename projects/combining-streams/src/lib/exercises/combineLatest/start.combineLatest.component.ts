@@ -8,7 +8,11 @@ import {CombineLatestBlogService} from "./combine-latest-blog.service";
   selector: 'combineLatest',
   template: `
     <h1>combineLatest</h1>
-    <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
+    <mat-form-field>
+      <label>Name</label>
+      <input matInput name="post" [(ngModel)]="post"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary">Add Post</button>
 
     <div *ngIf="blog$ | async as list">
       <mat-list>
@@ -21,6 +25,8 @@ import {CombineLatestBlogService} from "./combine-latest-blog.service";
   `
 })
 export class StartCombineLatestComponent {
+  post = 'my new post';
+
   blog$: Observable<BlogPost[]> = forkJoin([
     this.blogPostService.httpGetPosts(),
     this.blogPostService.httpGetComments()
@@ -33,8 +39,5 @@ export class StartCombineLatestComponent {
 
   }
 
-  addPost() {
-    this.blogPostService.addPost({title: 'new post'});
-  }
 
 }

@@ -1,56 +1,61 @@
 import { Component } from '@angular/core';
-import { combineLatest, of, Subject } from 'rxjs';
+import { BlogService } from './blog.service';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
-import { BlogBasicService, toBlogPosts } from 'shared';
+import { BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'with-latest-from',
   template: `
     <h1>withLatestFrom</h1>
 
-  <mat-form-field>
-    <label>Name</label>
-    <input matInput name="comment" [(ngModel)]="comment"/>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="listService.addComment({'text': comment, 'postId': 1})">AddItem</button>
+    <mat-form-field>
+      <label>Name</label>
+      <input matInput name="post" [(ngModel)]="post"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
-  <ng-container *ngIf="(numNewItems$ | async) as numItems">
-    <button mat-raised-button color="accent"
-            *ngIf="numItems > 0"
-            (click)="optInListClick$.next($event)">
-      Update List ({{(
-      numItems
-    )}})
-    </button>
-  </ng-container>
+    <ng-container *ngIf="(numNewItems$ | async) as numItems">
+      <button mat-raised-button color="accent"
+              [disabled]="numItems === 0"
+              (click)="optInListClick$.next($event)">
+        New posts: ({{(
+        numItems
+      )}})
+      </button>
+    </ng-container>
 
-  <div *ngIf="blog$ | async as blog">
-    <mat-list>
-      <mat-list-item *ngFor="let post of blog">
-        <span mat-line>{{post.title}}</span>
-        <span mat-line>Comments: {{post.commentCount}}</span>
-      </mat-list-item>
-    </mat-list>
-  </div>
+    <div *ngIf="blog$ | async as blog">
+      <mat-list>
+        <mat-list-item *ngFor="let post of blog">
+          <span mat-line>{{post.title}}</span>
+          <span mat-line>Comments: {{post.commentCount}}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
   `
 })
 export class StartWithLatestFromComponent {
 
-  comment = 'my new comment';
+  post = 'my new post';
   optInListClick$ = new Subject();
-  numNewItems$ = of(0);
+  numNewItems$: Observable<number>;
+  feed$: Observable<BlogPost[]>; // use optInListClick$ and blog$ to calculate new feed$
 
   blog$ = combineLatest([
-    this.listService.posts$.pipe(filter(l => !!l.length)),
-    this.listService.comments$.pipe(filter(l => !!l.length))
+    this.blogService.posts$.pipe(filter(l => !!l.length)),
+    this.blogService.comments$.pipe(filter(l => !!l.length))
   ]).pipe(
     map(([posts, comments]) => toBlogPosts(posts, comments)),
     shareReplay(1)
   );
 
-  constructor(public listService: BlogBasicService) {
-    this.listService.fetchPosts();
-    this.listService.fetchComments();
+  constructor(public blogService: BlogService) {
+    this.blogService.fetchPosts();
+    this.blogService.fetchComments();
   }
 
+  addPost() {
+    this.blogService.addPost({ title: this.post });
+  }
 }

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {combineLatest, concat, Observable, Subject} from 'rxjs';
 import {filter, map, shareReplay, take, withLatestFrom} from 'rxjs/operators';
-import {BlogBasicService, toBlogPosts} from 'shared';
+import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'solution-opt-in-updates-basic',
@@ -10,22 +10,21 @@ import {BlogBasicService, toBlogPosts} from 'shared';
 
     <mat-form-field>
       <label>Name</label>
-      <input matInput name="comment" [(ngModel)]="comment"/>
+      <input matInput name="post" [(ngModel)]="post"/>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="listService.addComment({'text': comment, 'postId': 1})">AddItem
-    </button>
+    <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
     <ng-container *ngIf="(numNewItems$ | async) as numItems">
       <button mat-raised-button color="accent"
-              *ngIf="numItems > 0"
+              [disabled]="numItems === 0"
               (click)="optInListClick$.next($event)">
-        Update List ({{(
+        New posts: ({{(
         numItems
       )}})
       </button>
     </ng-container>
 
-    <div *ngIf="acceptedItems$ | async as blog">
+    <div *ngIf="feed$ | async as blog">
       <mat-list>
         <mat-list-item *ngFor="let post of blog">
           <span mat-line>{{post.title}}</span>
@@ -37,36 +36,40 @@ import {BlogBasicService, toBlogPosts} from 'shared';
 })
 export class SolutionWithLatestFromComponent {
 
-  comment = 'my new comment';
+  post = 'my new post';
   optInListClick$ = new Subject();
 
   blog$ = combineLatest([
-    this.listService.posts$.pipe(filter(l => !!l.length)),
-    this.listService.comments$.pipe(filter(l => !!l.length))
+    this.blogService.posts$.pipe(filter(l => !!l.length)),
+    this.blogService.comments$.pipe(filter(l => !!l.length))
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
     shareReplay(1)
   );
 
-  acceptedItems$ = concat(
+  feed$: Observable<BlogPost[]> = concat(
     this.blog$.pipe(take(1)),
     this.optInListClick$.pipe(
       withLatestFrom(this.blog$),
       map(([_, items]) => items)
-    )
+    ),
+    shareReplay(1)
   );
   numNewItems$: Observable<number> = combineLatest([
     this.blog$,
-    this.acceptedItems$
+    this.feed$
   ])
     .pipe(
       map(([a, b]) => Math.abs(a.length - b.length))
     );
 
 
-  constructor(public listService: BlogBasicService) {
-    this.listService.fetchPosts();
-    this.listService.fetchComments();
+  constructor(public blogService: BlogBasicService) {
+    this.blogService.fetchPosts();
+    this.blogService.fetchComments();
   }
 
+  addPost() {
+    this.blogService.addPost({ title: this.post });
+  }
 }

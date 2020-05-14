@@ -59,7 +59,7 @@ export class BlogBasicService {
     this.httpPostPost(post)
       .subscribe((v) => {
         console.log(v);
-        // this.fetchPosts();
+        this.fetchPosts();
       }, console.log);
   }
 
