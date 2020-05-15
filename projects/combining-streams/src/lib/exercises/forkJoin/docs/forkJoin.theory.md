@@ -9,7 +9,7 @@ In this very example we will utilize the `forkJoin` operator.
 On first sight it is a perfect match for combining HTTP Requests since it waits until all
 combined operators `complete` before emitting a result.
 
-## Example
+## Behavior
 
 The below example showcases a very simple case using the `forkJoin` operator. 
 We make use of the `of` creation function (passing a singe value), as its emission pattern is very similar to an HTTP request.
@@ -31,12 +31,14 @@ result$
 The visual representation of the above example:
 
 ![forkJoin http calls](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-http_michael-hladky.png)
+_forkJoin http calls_
 
 The gray boxes at the bottom of the operator scope symbolize a cache which stores the last emitted value of each included Observable. 
 
 If any of the sources raises an `error`, it gets forwarded, and the resulting Observable errors. 
 
 ![forkJoin error](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-error_michael-hladky.png)
+_forkJoin error_
 
 ## 💡 Gotcha(s)!
 
@@ -47,7 +49,9 @@ As stated above, the `forkJoin` creation function waits until every source raise
  This example shows how `forkJoin` only emits the last value after all sources `completed`.
 
 ![forkJoin all complete last](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-emit-all-last_michael-hladky.png)
+_forkJoin all complete last_
 
  Here you can see how `forkJoin` will never emit any value, because `a$` does not `complete`.
 
 ![forkJoin no emission if not all complete](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-emit-after-all-complete_michael-hladky.png)
+_forkJoin no emission if not all complete_

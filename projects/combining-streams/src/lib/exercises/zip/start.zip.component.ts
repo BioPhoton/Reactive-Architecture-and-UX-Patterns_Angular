@@ -36,7 +36,6 @@ import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
         </mat-list-item>
       </mat-list>
     </div>
-
   </div>
   `,
   styles: [

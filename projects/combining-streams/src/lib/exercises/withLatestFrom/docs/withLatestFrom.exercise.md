@@ -9,11 +9,11 @@ Imagine a message feed like _twitter_ where new arriving _tweets_ first inform t
 the feed. 
 In this scenario, users are able to _opt-in_ for updates.
 
+![current solution: instant updates visualized](./assets/images/Reactive-architecture-and-ux-patterns_angular_instant-updates_michael-hladky.png)
 _current solution: instant updates visualized_
-![](./assets/images/Reactive-architecture-and-ux-patterns_angular_instant-updates_michael-hladky.png)
 
+![desired solution: opt-in updates visualized](./assets/images/Reactive-architecture-and-ux-patterns_angular_opt-in-updates_michael-hladky.png)
 _desired solution: opt-in updates visualized_
-![](./assets/images/Reactive-architecture-and-ux-patterns_angular_opt-in-updates_michael-hladky.png)
 
 For this exercise we have to extend our `Component` with extra functionalities.
 
@@ -24,7 +24,6 @@ export class StartWithLatestFromComponent {
   numNewItems$: Observable<number>; // the derived number of new items available for display
   feed$: Observable<BlogPost[]>; // the new feed to display. use blog$ and optIntListClick$ to calculate
 }
-
 ```
 
 ## Exercise

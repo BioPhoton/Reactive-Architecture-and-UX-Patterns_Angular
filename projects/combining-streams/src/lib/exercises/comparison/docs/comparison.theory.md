@@ -21,6 +21,7 @@ We have 2 different types, operators and creators functions.
 The operators of the listed functions always have the following signature:
 `(Observable<T>) => (Observable<R>) => Observable<[T, R]>` 
 
-In version 7 of RxJS there was a refactoring.
-
+In version `7` of RxJS there was a refactoring. 
+The operator versions of `zip` and `combineLatest` got deprecated and the 
+new operators `zipWith` and `combineLatestWith` got introduced.
 
