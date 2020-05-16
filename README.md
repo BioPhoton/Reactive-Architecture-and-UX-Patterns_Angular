@@ -30,7 +30,7 @@ First the level. For this course, you definitely need some fundamental knowledge
 General terms like subscription handling, multi-casting, or hot/cold Observables should at least ring a little bell.
 
 If this is not the case no big deal. As this, in an online course, you can consume it as fast or slow as you like.
-It's all about fun and explores new things, so the most important to enjoy! :)
+It's all about fun and explores new things, so the most important to enjoy it! :)
 
 
 ## Content and Learning Goals
