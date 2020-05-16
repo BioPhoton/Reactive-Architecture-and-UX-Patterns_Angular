@@ -8,13 +8,13 @@ _Over-fetching HTTP requests visualized_
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_over-fetching_michael-hladky.png)
 
 This is a result of wrong state-management. To face this problem, we need to store the results of the HTTP Requests in
-a shared cache. We can put this behavior inside a `Service` in order to share our state accross multiple `Components`.
+a shared cache. We can put this behavior inside a `Service` in order to share our state across multiple `Components`.
 
 
 ![Shared data store visualized](./assets/images/Reactive-architecture-and-ux-patterns_angular_http-caching_michael-hladky.png)
 _Shared data store visualized_
 
-For this exercise we introduce a very basic HTTP cache solution by using a `BehaviorSubject` as a shared data store. Instead
+For this exercise, we introduce a very basic HTTP cache solution by using a `BehaviorSubject` as a shared data store. Instead
 of binding `Components` directly to HTTP Requests, we will feed the data store with the results and provide
  single shared `Observables` mapped from the data store. 
 
@@ -79,7 +79,7 @@ constructor(...) {
 
 ## Exercise
 
-Eliminate the HTTP requests from the `Component` any make use of the shared Observables `posts$` and `comments$`.
+Eliminate the HTTP requests from the `Component` and make use of the shared Observables `posts$` and `comments$`.
 Even though the data in our store gets updated properly, the `Component` won't be able to display the list of
 `BlogPost` anymore.
 This is because `posts$` and `comments$` do not `complete`. Since `forkJoin` relies on its sources to complete, it won't 
