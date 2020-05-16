@@ -15,15 +15,12 @@ import { BlogPost, toBlogPosts } from 'shared';
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
-    <ng-container *ngIf="(numNewItems$ | async) as numItems">
-      <button mat-raised-button color="accent"
-              [disabled]="numItems === 0"
-              (click)="optInListClick$.next($event)">
-        New posts: ({{(
-        numItems
-      )}})
-      </button>
-    </ng-container>
+    <button mat-raised-button color="accent"
+            (click)="optInListClick$.next($event)">
+      New posts: ({{(
+      numNewItems$ | async
+    )}})
+    </button>
 
     <div *ngIf="blog$ | async as blog">
       <mat-list>

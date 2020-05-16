@@ -15,14 +15,16 @@ _current solution: instant updates visualized_
 ![desired solution: opt-in updates visualized](./assets/images/Reactive-architecture-and-ux-patterns_angular_opt-in-updates_michael-hladky.png)
 _desired solution: opt-in updates visualized_
 
-For this exercise we have to extend our `Component` with extra functionalities.
+For this exercise we have to extend our `Component`.
 
 ```Typescript
+// start.withLatestFrom.component.ts 
+
 @Component()
 export class StartWithLatestFromComponent {
   optInListClick$ = new Subject(); // performs the opt-in update on button click
   numNewItems$: Observable<number>; // the derived number of new items available for display
-  feed$: Observable<BlogPost[]>; // the new feed to display. use blog$ and optIntListClick$ to calculate
+  feed$: Observable<BlogPost[]>; // the new feed to display. use blog$ and optInListClick$ to calculate
 }
 ```
 
@@ -30,4 +32,6 @@ export class StartWithLatestFromComponent {
 
 Utilize the `withLatestFrom` combination operator and implement a _staging_ area for new arriving `BlogPost`.
 Use the new introduced properties `optInListClick$`, `numNewItems$` and `feed$` to implement your solution. You should
-end up replacing the view binding of `blog$` by `feed$`. Use `blog$` and `optInListClick$` to calculate the new feed.
+end up replacing the view binding of `blog$` by `feed$`.
+
+Use `blog$` and `optInListClick$` to compute the new feed.

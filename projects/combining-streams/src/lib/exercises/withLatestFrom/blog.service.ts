@@ -58,7 +58,7 @@ export class BlogService {
         this.state$.next({
           ...this.state$.getValue(),
           posts: upsertEntities(this.state$.getValue().posts, [newPost], 'id')
-        })
+        });
       }, console.log);
   }
 

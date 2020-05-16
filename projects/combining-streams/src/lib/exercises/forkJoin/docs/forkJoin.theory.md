@@ -5,7 +5,7 @@ Combination operators or creation functions enable us to process emissions
 from different `Observables` and transform them into a single emission.
 The resulting value is an array with the last emitted value of all included Observables.
 
-In this very example, we will utilize the `forkJoin` operator. 
+In this very exercise, we will utilize the `forkJoin` operator. 
 On first sight it is a perfect match for combining HTTP Requests since it waits until all
 combined operators `complete` before emitting a result.
 
@@ -29,13 +29,12 @@ result$
   })        
 ```
 The visual representation of the above example:
+The gray boxes at the bottom of the operator scope symbolize a cache which stores the last emitted value of each included Observable. 
 
 ![forkJoin http calls](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-http_michael-hladky.png)
 _forkJoin http calls_
 
-The gray boxes at the bottom of the operator scope symbolize a cache which stores the last emitted value of each included Observable. 
-
-If any of the sources raises an `error`, it gets forwarded, and the resulting Observable errors. 
+If any of the sources raises an `error`, it gets forwarded, and the resulting Observable errors.
 
 ![forkJoin error](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-error_michael-hladky.png)
 _forkJoin error_

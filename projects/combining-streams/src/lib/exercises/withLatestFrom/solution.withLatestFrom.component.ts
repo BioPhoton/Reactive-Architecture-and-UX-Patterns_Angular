@@ -14,15 +14,13 @@ import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="addPost()">Add Post</button>
 
-    <ng-container *ngIf="(numNewItems$ | async) as numItems">
-      <button mat-raised-button color="accent"
-              [disabled]="numItems === 0"
-              (click)="optInListClick$.next($event)">
-        New posts: ({{(
-        numItems
-      )}})
-      </button>
-    </ng-container>
+    <button mat-raised-button color="accent"
+            [disabled]="(numNewItems$ | async) === 0"
+            (click)="optInListClick$.next($event)">
+      New posts: ({{(
+      numNewItems$ | async
+    )}})
+    </button>
 
     <div *ngIf="feed$ | async as blog">
       <mat-list>
@@ -47,14 +45,16 @@ export class SolutionWithLatestFromComponent {
     shareReplay(1)
   );
 
+  optInUpdate$: Observable<BlogPost[]> = this.optInListClick$.pipe(
+    withLatestFrom(this.blog$),
+    map(([_, items]) => items)
+  );
+
   feed$: Observable<BlogPost[]> = concat(
     this.blog$.pipe(take(1)),
-    this.optInListClick$.pipe(
-      withLatestFrom(this.blog$),
-      map(([_, items]) => items)
-    ),
-    shareReplay(1)
-  );
+    this.optInUpdate$
+  ).pipe(shareReplay(1));
+
   numNewItems$: Observable<number> = combineLatest([
     this.blog$,
     this.feed$
