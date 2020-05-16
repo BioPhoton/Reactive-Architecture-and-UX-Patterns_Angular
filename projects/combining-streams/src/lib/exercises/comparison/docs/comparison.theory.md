@@ -25,3 +25,64 @@ In version `7` of RxJS there was a refactoring.
 The operator versions of `zip` and `combineLatest` got deprecated and the 
 new operators `zipWith` and `combineLatestWith` got introduced.
 
+Let's have a look at their usage.
+
+**combineLatest and combineLatestWith**
+```typescript
+import {combineLatest, interval} from 'rxjs';
+import {combineLatestWith} from 'rxjs/operators';
+
+const source1$ = interval(1000);
+const source2$ = interval(500);
+
+const result1$ = combineLatest([source1$,source2$]);
+
+const result2$ = source1$.pipe(
+    combineLatestWith(source2$)
+);
+```
+
+This 2 operators are siblings, one of them, `combineLates` is the creation function. 
+The other, `combineLatestWith` is the operator. 
+
+
+**zip and zipWith**
+```typescript
+// rxjs version 7
+import {zip, interval} from 'rxjs';
+import {zipWith} from 'rxjs/operators';
+
+const source1$ = interval(1000);
+const source2$ = interval(500);
+
+const result1$ = zip([source1$,source2$]);
+
+const result2$ = source1$.pipe(
+    zipWith(source2$)
+);
+```
+
+This 2 operators are similar to `combineLatest` siblings, 
+The creation function is `zip` and the operator is `zipWith`.
+
+**withLatestFrom**
+```typescript
+// rxjs version 7
+import {interval} from 'rxjs';
+import {withLatestFrom} from 'rxjs/operators';
+
+const source1$ = interval(1000);
+const source2$ = interval(500);
+
+const result1$ = source1$.pipe(
+    withLatestFrom(source2$)
+);
+```
+
+For this behaviour we only have the operator. 
+This creation function would not be that intuitive to use.
+
+To get some more overview of the behaviour lets start a small exercise.
+
+
+
