@@ -1,4 +1,4 @@
-# `forkJoin` creation function - Theory
+# forkJoin behavior and gotchas
 
 This exercise is about combining data coming from multiple HTTP Endpoints into one single set of data.
 Combination operators or creation functions enable us to process emissions 
