@@ -5,7 +5,7 @@ Combination operators or creation functions enable us to process emissions
 from different `Observables` and transform them into a single emission.
 The resulting value is an array with the last emitted value of all included Observables.
 
-In this very example we will utilize the `forkJoin` operator. 
+In this very example, we will utilize the `forkJoin` operator. 
 On first sight it is a perfect match for combining HTTP Requests since it waits until all
 combined operators `complete` before emitting a result.
 
