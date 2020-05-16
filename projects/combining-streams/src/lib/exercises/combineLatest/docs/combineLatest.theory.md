@@ -1,11 +1,11 @@
 # `combineLatest` creation function - Theory
 
-In the previous example we learned how to combine multiple HTTP Requests into one stream with `forkJoin`.
-Often operators are special forms or sub forms of other operators.
-If we take a look at the overview of combination patterns we realize that two of them look very similar, forkJoin and combine.
+In the previous example, we learned how to combine multiple HTTP Requests into one stream with `forkJoin`.
+Often operators are special forms or subforms of other operators.
+If we take a look at the overview of combination patterns we realize that two of them look very similar, forkJoin, and combine.
 
 Both combine the values of the source Observables to one emission, but `combineLatest` in comparison to `forkJoin` does not rely
-on all sources to complete. Thus allowing us to process ongoing Observables. If any of the sources emits **a new value**, the
+on all sources to complete. Thus allowing us to process ongoing Observables. If any of the sources emit **a new value**, the
 result will update to the **latest values** of each source.
 
 ![forkJoin no emission if not all complete](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-forkJoin-vs-combine_michael-hladky.png)
@@ -44,7 +44,7 @@ _combineLatest - inner error_
 
 ## 💡 Gotcha(s)!
 
-Be careful, `combineLatest` will emit it's first value after **all** sources emitted at least one value.
+Be careful, `combineLatest` will emit its first value after **all** sources emitted at least one value.
 This can result in situations where no value ever gets emitted.
 
  ```Typescript
