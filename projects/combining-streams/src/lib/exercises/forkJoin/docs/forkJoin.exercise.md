@@ -2,7 +2,7 @@
 
 ## Intro
 
-Since we want to build a simple Blog application, let's start with displaying a list of `BlogPost`.
+Since we want to build a simple Blog application, let's start by displaying a list of `BlogPost`.
 There are HTTP Endpoints available which provide us with `Comment` & `Post` data. The task will be to combine the two Endpoints in
 order to get the final list of `BlogPost`;
  
