@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
-import {combineLatest, fromEvent, ReplaySubject, Subscription, zip} from "rxjs";
+import {combineLatest, fromEvent, ReplaySubject, Subject, Subscription, zip} from "rxjs";
 import {map, shareReplay, startWith, tap, withLatestFrom} from "rxjs/operators";
 
 @Component({
@@ -35,9 +35,9 @@ export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
   @ViewChild('box')
   boxViewChild;
 
-  clickResultCombine$ = new ReplaySubject<string>(1);
-  clickResultWithLatest$ = new ReplaySubject<string>(1);
-  clickResultZip$ = new ReplaySubject<string>(1);
+  clickResultCombine$ = new Subject<string>();
+  clickResultWithLatest$ = new Subject<string>();
+  clickResultZip$ = new Subject<string>();
 
   constructor(private elemRef: ElementRef) {
   }

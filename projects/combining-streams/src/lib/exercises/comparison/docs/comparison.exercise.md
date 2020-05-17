@@ -2,6 +2,8 @@
 
 ## Intro
 
+![Combination operators comparison - screenshot](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
+
 In the start component you will find a screen split into 2 sections.
 Left and right. In the center 
 we have 3 boxed displaying the result of the named strategies combine, withLatest and zip.
@@ -27,6 +29,16 @@ we have 3 boxed displaying the result of the named strategies combine, withLates
     {{clickResultZip$ | async}}
   </div>
 </div>
+```
+
+In the components class we have the displayed observables present as Subjects:
+```typescript
+export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
+  // ...
+
+  clickResultCombine$ = new Subject<string>();
+  clickResultWithLatest$ = new Subject<string>();
+  clickResultZip$ = new Subject<string>();
 ```
 
 Also, 2 Observables are already setup in the `ngAfterViewInit` hook, `clickPosX$` and `elemWith$`. 

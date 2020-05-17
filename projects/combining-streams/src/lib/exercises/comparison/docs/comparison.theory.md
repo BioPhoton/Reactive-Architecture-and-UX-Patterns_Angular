@@ -1,6 +1,6 @@
 # Combination Operators Comparison
 
-As we did quite a lot od technical stuff it's time to relax and do some playful stuff.
+As we did quite a lot of technical stuff it's time to relax and do some playful stuff.
 Let's see how the combination operators compare to each other. :)
  
 In this exercise we compare the different operators:
@@ -15,13 +15,13 @@ We exclude `forkJoin` as we will process ongoing streams.
 Also, the operators `zipAll` as well as `combineAll` are left out.
 We will discuss `All` operators in a different chapter.
 
-Let's take a closer look to the used RxJs functions.
-We have 2 different types, operators and creators functions.
+Let's take a closer look at the used RxJs functions.
+We have 2 different types, operators, and creators functions.
 
 The operators of the listed functions always have the following signature:
 `(Observable<T>) => (Observable<R>) => Observable<[T, R]>` 
 
-In version `7` of RxJS there was a refactoring. 
+In version `7` of RxJS, there was a refactoring. 
 The operator versions of `zip` and `combineLatest` got deprecated and the 
 new operators `zipWith` and `combineLatestWith` got introduced.
 
@@ -42,7 +42,7 @@ const result2$ = source1$.pipe(
 );
 ```
 
-This 2 operators are siblings, one of them, `combineLates` is the creation function. 
+These 2 operators are siblings, one of them, `combineLates` is the creation function. 
 The other, `combineLatestWith` is the operator. 
 
 
@@ -62,7 +62,7 @@ const result2$ = source1$.pipe(
 );
 ```
 
-This 2 operators are similar to `combineLatest` siblings, 
+These 2 operators are similar to `combineLatest` siblings, 
 The creation function is `zip` and the operator is `zipWith`.
 
 **withLatestFrom**
@@ -79,10 +79,10 @@ const result1$ = source1$.pipe(
 );
 ```
 
-For this behaviour we only have the operator. 
+For this behavior, we only have the operator. 
 This creation function would not be that intuitive to use.
 
-To get some more overview of the behaviour lets start a small exercise.
+To get some more overview of the behavior lets to start a small exercise.
 
 
 
