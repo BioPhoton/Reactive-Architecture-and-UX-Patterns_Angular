@@ -5,7 +5,7 @@ situations where it is necessary to access the latest value from an `Observable`
 
 `withLatestFrom` combines the last _emitted_ value of the provided source `Observable` to an active stream of data.
 
-We will utilize the `withLatestFrom` operator in this exercise to setup a _staging_ area for new incoming `BlogPost` 
+We will utilize the `withLatestFrom` operator in this exercise to set up a _staging_ area for new incoming `BlogPost` 
 in order to achieve user controller opt-in updates for the view.
 
 ## Behavior 
