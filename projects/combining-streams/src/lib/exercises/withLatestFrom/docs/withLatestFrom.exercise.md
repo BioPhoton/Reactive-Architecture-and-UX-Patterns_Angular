@@ -15,7 +15,7 @@ _current solution: instant updates visualized_
 ![desired solution: opt-in updates visualized](./assets/images/Reactive-architecture-and-ux-patterns_angular_opt-in-updates_michael-hladky.png)
 _desired solution: opt-in updates visualized_
 
-For this exercise we have to extend our `Component`.
+For this exercise, we have to extend our `Component`.
 
 ```Typescript
 // start.withLatestFrom.component.ts 
