@@ -9,7 +9,7 @@ order to get the final list of `BlogPost`;
 ## Exercise
 
 Use the `forkJoin` operator to combine the http calls for `Comment` & `Post`.
-You can find the methods `httpGetComments` and `httpGetPosts` in the `ForkJoinBlogService` service.
+You can find the methods `httpGetComments` and `httpGetPosts` in the `ZipService` service.
   
 After retrieving the 2 results from the `forkJoin` creation function,
 we use the `map` operator to calculate the new list of `BlogPost` with `toBlogPosts`.
@@ -20,7 +20,7 @@ This `Component` will be the starting point for you. All needed dependencies are
 ```Typescript
 // start.forkJoin.component.ts 
 import {BlogPost, toBlogPosts} from 'shared';
-import {ForkJoinBlogService} from './fork-join-blog.service';
+import {ZipService} from './fork-join-blog.service';
 
 
 export class StartForkJoinComponent {
@@ -28,7 +28,7 @@ export class StartForkJoinComponent {
 
   blog$: Observable<BlogPost[]>; // join http calls and mat to blog posts here 
   
-  constructor(private blogPostService: ForkJoinBlogService) {
+  constructor(private blogPostService: ZipService) {
   }
 
 }

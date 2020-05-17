@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { combineLatest, Observable, } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
+import {Component} from '@angular/core';
+import {combineLatest, Observable, zip,} from 'rxjs';
+import {distinctUntilChanged, filter, map, share, shareReplay, tap} from 'rxjs/operators';
+import {BlogPost, toBlogPosts} from 'shared';
+import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.service";
 
 @Component({
   selector: 'zip',
@@ -9,9 +10,10 @@ import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
 
   <mat-form-field>
     <label>Name</label>
-    <input matInput name="comment" [(ngModel)]="comment"/>
+    <input matInput name="post" [(ngModel)]="title"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="listService.addComment({'text': comment, 'postId': 1})">AddItem</button>
+  <button mat-raised-button color="primary" (click)="blogPostService.addPost({title: title})">Add Comment
+  </button>
 
   <p><b>renders: {{renders()}}</b></p>
   <p><b>processJoinedList: {{processJoinedList()}}</b></p>
@@ -48,35 +50,41 @@ import { BlogBasicService, BlogPost, toBlogPosts } from 'shared';
   ]
 })
 export class StartZipComponent {
-  comment = 'my new item';
+  title = 'my new Title';
   numProcessJoinedList = 0;
   numRenders = 0;
   numProcessLikedList = 0;
 
   blog$ = combineLatest([
-    this.listService.posts$,
-    this.listService.comments$
+    this.blogPostService.posts$,
+    this.blogPostService.comments$
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
-    tap(v => ++this.numProcessJoinedList)
-  );
-  commentedIds$ = this.blog$.pipe(map(list => list
-    .filter(i => i.commentCount > 0)
-    .map(i => i.id))
+    tap(v => ++this.numProcessJoinedList),
+    share()
   );
 
-  commentedPosts$: Observable<BlogPost[]> = combineLatest([
+  commentedIds$ = this.blog$.pipe(
+    map(list => list
+    .filter(i => i.commentCount > 0)
+    .map(i => i.id)
+    ),
+    distinctUntilChanged()
+  );
+
+  //
+  commentedPosts$: Observable<BlogPost[]> = zip(
     this.blog$,
     this.commentedIds$
-  ])
+  )
     .pipe(
       map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
       tap(v => ++this.numProcessLikedList)
     );
 
-  constructor(public listService: BlogBasicService) {
-    this.listService.fetchPosts();
-    this.listService.fetchComments();
+  constructor(public blogPostService: ZipBlogService) {
+    this.blogPostService.fetchPosts();
+    this.blogPostService.fetchComments();
   }
 
   processJoinedList() {

@@ -9,7 +9,7 @@
 import {forkJoin, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {BlogPost, toBlogPosts} from 'shared';
-import {ForkJoinBlogService} from './fork-join-blog.service';
+import {ZipService} from './fork-join-blog.service';
 
 export class SolutionForkJoinComponent {
   // ...
@@ -22,7 +22,7 @@ export class SolutionForkJoinComponent {
        map(([posts, comments]) => toBlogPosts(posts, comments))
     )
       
-  constructor(private blogPostService: ForkJoinBlogService) {
+  constructor(private blogPostService: ZipService) {
   }
 
 }

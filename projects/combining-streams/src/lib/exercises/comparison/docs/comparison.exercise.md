@@ -3,6 +3,7 @@
 ## Intro
 
 ![Combination operators comparison - screenshot](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
+_Combination operators comparison - screenshot_
 
 In the start component you will find a screen split into 2 sections.
 Left and right. In the center 
