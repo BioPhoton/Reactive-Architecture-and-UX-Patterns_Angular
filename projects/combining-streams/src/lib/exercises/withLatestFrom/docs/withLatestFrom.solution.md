@@ -20,7 +20,7 @@ numNewItems$: Observable<number> = combineLatest([
 
 ```
 
-Then, we have built the opt-in update logic by using the `optInListClick$` as trigger
+Then, we have built the opt-in update logic by using the `optInListClick$` as trigger a
 to emit the _latest_ value of `blog$` utilizing `withLatestFrom`.
 
 ```Typescript
@@ -47,4 +47,4 @@ feed$: Observable<BlogPost[]> = concat(
 
 ```
 
-Great! We learned how to build a mechanism for user controlled opt-in updates with `withLatestFrom`.
+Great! We learned how to build a mechanism for user-controlled opt-in updates with `withLatestFrom`.
