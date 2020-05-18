@@ -83,7 +83,7 @@ Here we use the `add` method of our subscription instance.
 This allows us to add other subscriptions to the existing one by adding it as a nested subscription.
 If we call unsubscribe on the main subscription we also unsubscribe from all added subscriptions.
 
-In the subscribe call we se  the following `.subscribe(this.clickResultCombine$)`.
+In the subscribe call we see  the following `.subscribe(this.clickResultCombine$)`.
 
 `clickResultCombine$` is a Subject. It exposes the `next`, `error`, and `complete` method.
 `subscribe` takes and Observer object which maintains the methods `next`, `error`, and `complete`.
