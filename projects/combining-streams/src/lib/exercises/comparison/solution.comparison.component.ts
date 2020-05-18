@@ -83,7 +83,7 @@ export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
 
   getSideOfClick(posX: number, width: number) {

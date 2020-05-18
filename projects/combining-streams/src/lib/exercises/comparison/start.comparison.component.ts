@@ -57,11 +57,11 @@ export class StartComparisonComponent implements AfterViewInit, OnDestroy {
     );
 
 
-    const elemWith$ = fromEvent(window, 'resize').pipe(
+    const elemWidth$ = fromEvent(window, 'resize').pipe(
       map(() => this.boxViewChild.nativeElement.getBoundingClientRect().width)
     );
     this.subscription.add(
-      elemWith$.subscribe(w => console.log('elemWith', w))
+      elemWidth$.subscribe(w => console.log('elemWidth', w))
     );
 
   }

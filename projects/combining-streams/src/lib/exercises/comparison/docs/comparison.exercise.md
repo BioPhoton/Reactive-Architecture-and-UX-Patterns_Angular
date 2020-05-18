@@ -5,9 +5,13 @@
 ![Combination operators comparison - exercise](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
 _Combination operators comparison - exercise_
 
-In the start component, you will find a screen split into 2 sections.
-Left and right. In the center 
-we have 3 boxed displaying the result of the named strategies combine, withLatest and zip.
+We have learned about each _combination operator_ individually. To get a deeper understanding about the differences
+between them, we wrap it up by using them all together.
+
+Let's implement a little game. In the start component you will find a board split into two panes.
+The board saves the `click` events' latest position in an `Observable` source.
+In the center there are three boxes, one for each _combining operator_. Each displaying its _combined_ value
+of the click position.
 
 ```html
 <h1>Comparison combination operators</h1>
@@ -32,7 +36,7 @@ we have 3 boxed displaying the result of the named strategies combine, withLates
 </div>
 ```
 
-In the components class we have the displayed observables present as Subjects:
+In the components we set up our view sources as `Subject`:
 ```typescript
 export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
   // ...
@@ -42,7 +46,9 @@ export class SolutionComparisonComponent implements AfterViewInit, OnDestroy {
   clickResultZip$ = new Subject<string>();
 ```
 
-Also, 2 Observables are already setup in the `ngAfterViewInit` hook, `clickPosX$` and `elemWith$`. 
+We setup the `click` binding in the `ngAfterViewInit` hook.
+`clickPosX$` emits the position.
+`elemWidth$` emits the boards' width. 
 
 ```typescript
   ngAfterViewInit(): void {
@@ -60,7 +66,7 @@ Also, 2 Observables are already setup in the `ngAfterViewInit` hook, `clickPosX$
     );
 
 
-    const elemWith$ = fromEvent(window, 'resize').pipe(
+    const elemWidth$ = fromEvent(window, 'resize').pipe(
       map(() => this.boxViewChild.nativeElement.getBoundingClientRect().width)
     );
     this.subscription.add(
@@ -69,10 +75,7 @@ Also, 2 Observables are already setup in the `ngAfterViewInit` hook, `clickPosX$
 
   }
 ```
-
-They are already subscribed to and will forward them with our click container, and the other Observable logs the click position.
-
-A small helper function `getSideOfClick` is provided. 
+`getSideOfClick` can be used to map the `click` Event to its corresponding board side.
 
 ```typescript
   getSideOfClick(posX: number, width: number): string {
@@ -80,13 +83,11 @@ A small helper function `getSideOfClick` is provided.
   }
 ```
 
-It takes the click position and the with of the element and calculates if the click happened ant the right or left section of the container.
 
 ## Exercise
 
-Create an Observable with that calculates the side of the click.
-
-Use the listed operators:
+Implement the view bindings `clickResultCombine$`, `clickResultWithLatest$` and `clickResultZip$` by using the following
+ operators:
 
 - `combineLatest`
 - `combineLatestWith`
@@ -94,4 +95,4 @@ Use the listed operators:
 - `zipWith`
 - `withLatestFrom`
 
-Resize and click and see how the different operators behave.
+Resize and click around and see how the different operators behave.
