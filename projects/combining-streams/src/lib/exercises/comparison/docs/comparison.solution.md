@@ -1,5 +1,8 @@
 # Combination Operators Comparison - Solution
 
+![Combination operators comparison - solution](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
+_Combination operators comparison - solution_
+
 To create the different combinations we compose and subscribe to int in the ngAfterViewInit section.
 
 

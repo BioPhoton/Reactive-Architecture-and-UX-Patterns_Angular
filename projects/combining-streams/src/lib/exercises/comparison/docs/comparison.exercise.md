@@ -1,11 +1,11 @@
-# Combination operators comparison - Exercise
+# Combination Operators Comparison - Exercise
 
 ## Intro
 
-![Combination operators comparison - screenshot](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
-_Combination operators comparison - screenshot_
+![Combination operators comparison - exercise](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-comparison-solution-screenshot_michael-hladky.png)
+_Combination operators comparison - exercise_
 
-In the start component you will find a screen split into 2 sections.
+In the start component, you will find a screen split into 2 sections.
 Left and right. In the center 
 we have 3 boxed displaying the result of the named strategies combine, withLatest and zip.
 
@@ -70,7 +70,7 @@ Also, 2 Observables are already setup in the `ngAfterViewInit` hook, `clickPosX$
   }
 ```
 
-They are already subscribed to and will forward the with of our click container, and the other Observable logs the  the click position.
+They are already subscribed to and will forward them with our click container, and the other Observable logs the click position.
 
 A small helper function `getSideOfClick` is provided. 
 
@@ -80,7 +80,7 @@ A small helper function `getSideOfClick` is provided.
   }
 ```
 
-It takes the click position and the with of the element and calculates if the click happend ant the right or left section of the container.
+It takes the click position and the with of the element and calculates if the click happened ant the right or left section of the container.
 
 ## Exercise
 

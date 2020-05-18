@@ -1,16 +1,16 @@
-# Combining Stream and Behavior
+# Combining streams and apply Behaviour
 
 ![Reactive Architecture and UX Patterns - Combining Stream and Behavior](./assets/images/Reactive-architecture-and-ux-patterns_angular_combining-streams-and-behavior_michael-hladky.png)
 
 This set of lessons is all about combination operators. 
 As this course focuses on real-life use cases,  
-we will use these operators in the context of state derivation, data fetching and update behavior.
+we will use these operators in the context of state derivation, data fetching, and update behavior.
 
 We will start with some snippets of code people normally use.  
-With our examples we will run into some problems with that simple approaches. 
+With our examples, we will run into some problems with that simple approaches. 
 
 As we go, we learn how to solve them, 
-introduce more robust patterns and finally know all the does and donts of deriving state with combination operators. 
+introduce more robust patterns and finally know all the does and don'ts of deriving state with combination operators. 
 
 ![Reactive Architecture and UX Patterns - Combination Operators](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-dark_michael-hladky.png)
 
@@ -28,7 +28,7 @@ operators to each other and the similarities in behavior.
 
 ## Combination Operators - Algebraic approach
 
-Another learning too I use, to teach people a more efficient learning of operators is the "Algebraic approach".
+Another learning to I use, to teach people more efficient learning of operators is the "Algebraic approach".
 I named it that way because it borrows concepts and thinking from one of the broad parts of mathematics, [Algebra](https://en.wikipedia.org/wiki/Algebra).
 
 > Literally translated Algebra means "reunion of broken parts".
@@ -40,10 +40,9 @@ The list of broken parts from the above set looks like this:
 
 If we understand every of those "broken parts" we are intuitively able to understand their "reunion", meaning the operators itself.
 
-## Combination Operators - Exercise walk through
+## Combination Operators - Exercise walkthrough
 
-In order to showcase the different capabilities and constraints of the combination operators we will create a very 
-simple Blog application. `Post` & `Comment` are the actual entities which can be fetched from service endpoints.
+In order to showcase the different capabilities and constraints of the combination operators, we will create a very simple Blog application. `Post` & `Comment` are the actual entities which can be fetched from service endpoints.
 The combination operators will be used to combine `Post` & `Comment` to `BlogPost`.
 
 ```Typescript
@@ -77,16 +76,16 @@ Within this set of lessons we will walk through the following exercises:
   - To solve it we refactor the give HTTP service to get more control over when we fetch the data
   - this reviles one of the special behaviours of `forkJoin` and we need to rethink it usage
   - http-service-v1
-- [ ] We learn the difference of `forkJoin` and `combineLatest` 
+- [ ] We learn the difference between `forkJoin` and `combineLatest` 
   - this knowledge helps us to refactor the service and component.
   - combineLatest
 - [ ] As we go we start to introduce more features into our UI
    - again we run into a problem, this time over-rendering.
    - zip
 - [ ] As it was quite technical so far we learn about `withLatestFrom` with a more playful example 
-  - by doing so we understand the concept of `promary` and `secondary` streams
+  - by doing so we understand the concept of `primary` and `secondary` streams
   - withLatestFrom
-- [ ] With a fresh and open mine we think about those concepts in combination with a UX Pattern called `opt-in updates`
+- [ ] With a fresh and open mind, we think about those concepts in combination with a UX Pattern called `opt-in updates`
   - to give a better experience to our users we implement this pattern in our example
   
 
