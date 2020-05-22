@@ -82,11 +82,11 @@ Within this set of lessons we will walk through the following exercises:
 - [ ] As we go we start to introduce more features into our UI
    - again we run into a problem, this time over-rendering.
    - zip
+- [ ] With a fresh and open mind, we think about those concepts in combination with a UX Pattern called `opt-in updates`
+  - to give a better experience to our users we implement this pattern in our example
 - [ ] As it was quite technical so far we learn about `withLatestFrom` with a more playful example 
   - by doing so we understand the concept of `primary` and `secondary` streams
   - withLatestFrom
-- [ ] With a fresh and open mind, we think about those concepts in combination with a UX Pattern called `opt-in updates`
-  - to give a better experience to our users we implement this pattern in our example
-  
+
 
 

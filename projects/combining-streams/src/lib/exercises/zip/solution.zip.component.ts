@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {combineLatest, Observable,} from 'rxjs';
-import {map, share, shareReplay, tap} from 'rxjs/operators';
+import {combineLatest, Observable, zip,} from 'rxjs';
+import {distinctUntilChanged, filter, map, share, shareReplay, tap} from 'rxjs/operators';
 import {BlogPost, toBlogPosts} from 'shared';
 import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.service";
 
@@ -20,7 +20,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
   <p><b>processLikedList: {{processLikedList()}}</b></p>
   <div class="row">
 
-    <div style="width: 49%" *ngIf="blog$ | async as list">
+    <div style="width: 49%" *ngIf="blogPosts$ | async as list">
       <b>All items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of list">
@@ -30,7 +30,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
     </div>
 
 
-    <div style="width: 49%" *ngIf="commentedPosts$ | async as likedItems">
+    <div style="width: 49%" *ngIf="commentedBlogPosts$ | async as likedItems">
       <b>Liked items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of likedItems">
@@ -55,23 +55,28 @@ export class SolutionZipComponent {
   numRenders = 0;
   numProcessLikedList = 0;
 
-  blog$ = combineLatest([
-    this.blogPostService.posts$,
-    this.blogPostService.comments$
+  blogPosts$ = combineLatest([
+    this.blogPostService.posts$.pipe(filter(list => !!list.length)),
+    this.blogPostService.comments$.pipe(filter(list => !!list.length))
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
-    tap(v => ++this.numProcessJoinedList)
+    tap(v => ++this.numProcessJoinedList),
+    share()
   );
 
-  commentedIds$ = this.blog$.pipe(map(list => list
-    .filter(i => i.commentCount > 0)
-    .map(i => i.id))
+  commentedIds$ = this.blogPosts$.pipe(
+    map(list => list
+      .filter(item => item.commentCount > 0)
+      .map(item => item.id)
+    ),
+    distinctUntilChanged()
   );
 
-  commentedPosts$: Observable<BlogPost[]> = combineLatest([
-    this.blog$,
+  //
+  commentedBlogPosts$: Observable<BlogPost[]> = zip(
+    this.blogPosts$,
     this.commentedIds$
-  ])
+  )
     .pipe(
       map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
       tap(v => ++this.numProcessLikedList)

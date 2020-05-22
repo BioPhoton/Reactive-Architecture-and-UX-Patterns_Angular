@@ -14,9 +14,9 @@ import {CombineLatestBlogService} from "./combine-latest-blog.service";
     </mat-form-field>
     <button mat-raised-button color="primary">Add Post</button>
 
-    <div *ngIf="blog$ | async as list">
+    <div *ngIf=" as list">
       <mat-list>
-        <mat-list-item *ngFor="let item of list">
+        <mat-list-item *ngFor="let item of blog$ | async">
           <span mat-line>{{item.title}}</span>
           <span mat-line>Comments: {{item.commentCount}}</span>
         </mat-list-item>

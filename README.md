@@ -52,19 +52,17 @@ Exercises we will master are:
   - State aggregation
   - Model vs ViewModel
   - Sharing state and instances
-  - Lazy-ness and component initialization
+  - Lazyness and component initialization
   - Immutability and gotchas in operators
 - Higher-Order Operators
-  - Overview of the different flattening strategies
-  (merge, concat, exhaust, switch)
-  - Usage in the user Interface
-  - Usage in business logic or data layer interaction like effects/epic of REDUX
+  - Overview of the different flattening operators
+  - Avoid race-conditions and over-fetching in UIs
+  - HTTP optimization strategies 
 - Resilience and Error-Handling
-  - HTTP error handling
-  - In-depth understanding of error handling
+  - Error handling operators overview
   - How to encapsulate error-prone code
-  - Offline caching and polling with exponential backoff
+  - Load balancing  and polling
+  - Offline friendly and exponential backoff
   - Comparison of the different retry & repeat mechanisms
-
 
 Let’s jump right in and start with the first section.

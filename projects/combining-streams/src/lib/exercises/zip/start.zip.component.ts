@@ -20,7 +20,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
   <p><b>processLikedList: {{processLikedList()}}</b></p>
   <div class="row">
 
-    <div style="width: 49%" *ngIf="blog$ | async as list">
+    <div style="width: 49%" *ngIf="blogPosts$ | async as list">
       <b>All items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of list">
@@ -30,7 +30,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
     </div>
 
 
-    <div style="width: 49%" *ngIf="commentedPosts$ | async as likedItems">
+    <div style="width: 49%" *ngIf="commentedBlogPosts$ | async as likedItems">
       <b>Liked items</b>
       <mat-list>
         <mat-list-item *ngFor="let item of likedItems">
@@ -55,26 +55,25 @@ export class StartZipComponent {
   numRenders = 0;
   numProcessLikedList = 0;
 
-  blog$ = combineLatest([
-    this.blogPostService.posts$,
-    this.blogPostService.comments$
+  blogPosts$ = combineLatest([
+    this.blogPostService.posts$.pipe(filter(list => !!list.length)),
+    this.blogPostService.comments$.pipe(filter(list => !!list.length))
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
     tap(v => ++this.numProcessJoinedList),
     share()
   );
 
-  commentedIds$ = this.blog$.pipe(
+  commentedIds$ = this.blogPosts$.pipe(
     map(list => list
-    .filter(i => i.commentCount > 0)
-    .map(i => i.id)
-    ),
-    distinctUntilChanged()
+      .filter(item => item.commentCount > 0)
+      .map(item => item.id)
+    )
   );
 
   //
-  commentedPosts$: Observable<BlogPost[]> = zip(
-    this.blog$,
+  commentedBlogPosts$: Observable<BlogPost[]> = zip(
+    this.blogPosts$,
     this.commentedIds$
   )
     .pipe(
