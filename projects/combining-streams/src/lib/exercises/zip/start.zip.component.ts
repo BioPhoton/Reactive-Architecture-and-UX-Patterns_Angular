@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {combineLatest, Observable, zip,} from 'rxjs';
-import {distinctUntilChanged, filter, map, share, shareReplay, tap} from 'rxjs/operators';
-import {BlogPost, toBlogPosts} from 'shared';
-import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.service";
+import { Component } from '@angular/core';
+import { ZipBlogService } from 'combining-streams/lib/exercises/zip/zip-blog-post.service';
+import { combineLatest, Observable, zip } from 'rxjs';
+import { filter, map, share, tap } from 'rxjs/operators';
+import { BlogPost, toBlogPosts } from 'shared';
 
 @Component({
   selector: 'zip',
@@ -17,7 +17,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
 
   <p><b>renders: {{renders()}}</b></p>
   <p><b>processJoinedList: {{processJoinedList()}}</b></p>
-  <p><b>processLikedList: {{processLikedList()}}</b></p>
+  <p><b>processCommentedList: {{processCommentedList()}}</b></p>
   <div class="row">
 
     <div style="width: 49%" *ngIf="blogPosts$ | async as list">
@@ -30,11 +30,11 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
     </div>
 
 
-    <div style="width: 49%" *ngIf="commentedBlogPosts$ | async as likedItems">
-      <b>Liked items</b>
+    <div style="width: 49%" *ngIf="commentedBlogPosts$ | async as commentedBlogPosts">
+      <b>Commented posts</b>
       <mat-list>
-        <mat-list-item *ngFor="let item of likedItems">
-          {{item.title}} - Comments: {{item.commentCount}}
+        <mat-list-item *ngFor="let post of commentedBlogPosts">
+          {{post.title}} - Comments: {{post.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
@@ -53,11 +53,11 @@ export class StartZipComponent {
   title = 'my new Title';
   numProcessJoinedList = 0;
   numRenders = 0;
-  numProcessLikedList = 0;
+  numProcessCommentedList = 0;
 
   blogPosts$ = combineLatest([
-    this.blogPostService.posts$.pipe(filter(list => !!list.length)),
-    this.blogPostService.comments$.pipe(filter(list => !!list.length))
+    this.blogPostService.posts$,
+    this.blogPostService.comments$
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
     tap(v => ++this.numProcessJoinedList),
@@ -71,14 +71,14 @@ export class StartZipComponent {
     )
   );
 
-  //
-  commentedBlogPosts$: Observable<BlogPost[]> = zip(
+  // Only commented blog posts
+  commentedBlogPosts$: Observable<BlogPost[]> = combineLatest([
     this.blogPosts$,
     this.commentedIds$
-  )
+  ])
     .pipe(
-      map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
-      tap(v => ++this.numProcessLikedList)
+      map(([mergedList, commentedIds]) => (mergedList.filter(i => commentedIds.find(li => li === i.id)))),
+      tap(v => ++this.numProcessCommentedList)
     );
 
   constructor(public blogPostService: ZipBlogService) {
@@ -94,7 +94,7 @@ export class StartZipComponent {
     return ++this.numRenders;
   }
 
-  processLikedList() {
-    return this.numProcessLikedList;
+  processCommentedList() {
+    return this.numProcessCommentedList;
   }
 }

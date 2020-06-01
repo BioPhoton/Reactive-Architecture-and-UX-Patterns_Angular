@@ -1,109 +1,117 @@
 # Processing dependent values - Solution
 
-As a measure we take the:
-- Numbers of processing for bootstrapping
-- Numbers of processing for new data
+The goal was to improve the performance of the commented blog post list. We measure the performance by counting
+the number of processes which lead to a re-rendering of our component. 
 
-Initial measure:
+We can further divide the performance metrics to:
+- Numbers of processes for bootstrapping
+- Numbers of processes for new data
 
-**Numbers of processing for bootstrapping:**
-renders: 6
-processJoinedList: 27
-processLikedList: 17
+## Initial measurements
 
-**Numbers of processing for new data:**
-renders: 8 (Δ2)
-processJoinedList: 33 (Δ6)
-processLikedList: 21 (Δ4)
+**Numbers of processes for bootstrapping:**  
+renders: 6  
+processJoinedList: 27  
+processCommentedList: 17
 
+**Numbers of processes for new data:**  
+renders: 8 (Δ2)  
+processJoinedList: 33 (Δ6)  
+processCommentedList: 21 (Δ4)
 
-As a first step to the solution we introduced filter operators that 
-swallow empty arrays caused by non-lazy state management to improve the numbers.
+## Step 1 - lazy state
+As a first improvement we will `skip` the first value of the `posts$` and `comments$` state since those are initial values which should not get
+processed. This way the processing of `blogPosts$` starts with the first incoming value of the service.
 
 ```typescript
-blogs$ = combineLatest([
-    this.blogPostService.posts$.pipe(filter(list => !!list.length)),
-    this.blogPostService.comments$.pipe(filter(list => !!list.length))
+//solution.zip.component.ts
+
+blogPosts$ = combineLatest([
+    this.blogPostService.posts$.pipe(skip(1)),
+    this.blogPostService.comments$.pipe(skip(1))
 ])
 ```
 
-**Numbers of processing for bootstrapping:**
-renders: 5 (-1)
-processJoinedList: 15 (-12)
-processLikedList: 9 (-8)
+**Numbers of processes for bootstrapping:**  
+renders: 5 (-1)  
+processJoinedList: 15 (-12)  
+processCommentedList: 9 (-8)
 
-**Numbers of processing for new data:**
-renders: 7 (Δ2 => ~) 
-processJoinedList: 21 (Δ6 => ~)
-processLikedList: 13 (Δ4 => ~)
+**Numbers of processes for new data:**  
+renders: 7 (Δ2 => ~)   
+processJoinedList: 21 (Δ6 => ~)  
+processCommentedList: 13 (Δ4 => ~)
 
-As `blogs$` is used multiple times we share the processed values over the `share` operator.
+## Step 2 - sharing results
+As `blogPosts$` gets subscribed to multiple times, we should share its processed values by using the `share` operator.
+
 ```typescript
-blogs$ = combineLatest([
-    this.blogPostService.posts$.pipe(filter(list => !!list.length)),
-    this.blogPostService.comments$.pipe(filter(list => !!list.length))
-  ])
-  .pipe(
-    map(([list, items]) => toBlogPosts(list, items)),
-    tap(v => ++this.numProcessJoinedList),
-    share()
-  );
+//solution.zip.component.ts
+
+blogPosts$ = combineLatest([
+    this.blogPostService.posts$.pipe(skip(1)),
+    this.blogPostService.comments$.pipe(skip(1))
+]).pipe(
+      map(([list, items]) => toBlogPosts(list, items)),
+      tap(v => ++this.numProcessJoinedList),
+      share()
+    );
 ```
 
-**Numbers of processing for bootstrapping:**
-renders: 5 (-1)
-processJoinedList: 5 (-22)
-processLikedList: 9 (-8)
+**Numbers of processes for bootstrapping:**  
+renders: 5 (-1)  
+processJoinedList: 5 (-22)  
+processCommentedList: 9 (-8)
 
-**Numbers of processing for new data:**
-renders: 7 (Δ2 => ~) 
-processJoinedList: 7 (Δ2 => -4)
-processLikedList: 13 (Δ4 => ~)
+**Numbers of processes for new data:**  
+renders: 7 (Δ2 => ~)   
+processJoinedList: 7 (Δ2 => -4)  
+processCommentedList: 13 (Δ4 => ~)
 
-These improvements didn't change the way of processing it but still gave us a huge performance boost.
+## Step 3 - stream dependencies
 
-Another thing we could think of is to analyze the relations of the processed Observables. 
-We see that `blogPosts$` hast a relation to `commentedIds$`, or in other words `commentedIds$` is a derivation of `blogPosts$`.
+The first improvements didn't change the way of processing, still led to a performance boost.
+To even further improve the performance of our application, lets take a closer look at the relations of the processed `Observables`.
+
+We see that `blogPosts$` has a relation to `commentedIds$`, or in other words `commentedIds$` is a derivation of `blogPosts$`.
 
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-dependent-values_michael-hladky.png)
 
-`commentedBlogPosts$` needs to process `blogPosts$` and `commentedIds$` in pairs. This helps to avoid irrelevant processing.
+`commentedBlogPosts$` needs to process `blogPosts$` and `commentedIds$` in pairs. This helps to avoid not needed processings.
 
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators_over-rendering-with-combineLatest_michael-hladky.png)
 
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators_process-dependent-values_michael-hladky.png)
 
-Let's implement `zip` and see the new numbers. 
+Let's implement `zip` and see how it impacts the amount of processings. 
 
 ```typescript
+//solution.zip.component.ts
+
 commentedBlogPosts$: Observable<BlogPost[]> = zip(
     this.blogPosts$,
     this.commentedIds$
 )
     .pipe(
-        map(([mergedList, likedIds]) => (mergedList.filter(i => likedIds.find(li => li === i.id)))),
-        tap(v => ++this.numProcessLikedList)
+        map(([mergedList, commentedIds]) => (mergedList.filter(i => commentedIds.find(li => li === i.id)))),
+        tap(v => ++this.numprocessCommentedList)
     );
 ```
 
-**Numbers of processing for bootstrapping:**
-renders: 5 (-1)
-processJoinedList: 5 (-22)
-processLikedList: 5 (-12)
-
-**Numbers of processing for new data:**
-renders: 7 (Δ2 => ~) 
-processJoinedList: 7 (Δ2 => -4)
-processLikedList: 7 (Δ2 => -2)
-
-Pretty good! :D
+**Numbers of processes for bootstrapping:**  
+renders: 5 (-1)  
+processJoinedList: 5 (-22)  
+processCommentedList: 5 (-12)
+ 
+**Numbers of processes for new data:**  
+renders: 7 (Δ2 => ~)   
+processJoinedList: 7 (Δ2 => -4)  
+processCommentedList: 7 (Δ2 => -2)
 
 ## Conclusion
 
-We could get rid of most of the emissions by filtering out empty values and using share.
-The last tweaks where done by understanding the data structure relations 
-e.g. `commentedIds$` is a derivation of `blogPosts$`.
+We initially improved render performance by skipping initial values and sharing results.
+We then identified dependencies in our data flow and applied logic to take care of not needed processes.
 
-This interesting fact opens a new chapter for us, managing data structures and derivations.  
-
-In further exercises we will understand those concepts and avoid the targeted problem of over-rendering id a better more scalable and productive way.
+In the next exercises we will take a closer look at the concepts of managing data structures and derivations.
+You will understand those concepts and avoid the targeted problem of over-rendering id a better more scalable and productive way.

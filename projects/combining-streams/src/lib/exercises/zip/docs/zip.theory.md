@@ -1,57 +1,74 @@
 # zip behavior and gotchas
 
-
-So far the discussed operators where always  combining independent Observables, 
-and the processing get either done for each once of focusing on a primary stream.
-`zip` is different here.
+So far we have applied and discussed several operators to combine _independent_ `Observable` sources to a single stream. The `zip` operator combines
+multiple sources as well. Instead of managing them independently, the result is calculated in order.
 
 ## Behavior 
 
-`zip` waits for every value of each involved Observable and forwards
- one emission for all incoming emissions, meaning it emits one time all first emissions together, 
- one time all second emissions together and so on and so for. 
+`zip` waits for each source emitting a value and combines the result to a single output.
  
- If values take longer than others it waits with the emission. 
- Also, if one stream is emitting faster than the other it is waiting with emissions and caches the emitted values until other included streams emitted the same number of times to emit them together.
- 
-An example where the emissions wait for their other related Observables could be two polling mechanisms that depend on each other.
-In this example we use random intervals to demonstrate this:
+ ```Typescript
+ import { zip, of } from 'rxjs';
+ import { map } from 'rxjs/operators';
+  
+ const age$ = of<number>(27, 25, 29);
+ const name$ = of<string>('Foo', 'Bar', 'Beer');
+ const isDev$ = of<boolean>(true, true, false);
+  
+ zip(age$, name$, isDev$).pipe(
+   map(([age, name, isDev]) => ({ age, name, isDev }))
+ )
+ .subscribe(x => console.log(x));
+  
+ // outputs
+ // { age: 27, name: 'Foo', isDev: true }
+ // { age: 25, name: 'Bar', isDev: true }
+ // { age: 29, name: 'Beer', isDev: false }
+ ```
+
+If the sources emit values at different timings, `zip` waits until every source has emitted a value for the next combined result.
+
 ```Typescript
 import {interval, zip} from 'rxjs';
-const input1$ = interval(500); // emission rate varying between 1000 and 3000 ms
+
+const input1$ = interval(200);
 const input2$ = interval(1000);
 
 const result$ = zip(input1$, input2$);
 result$.subscribe(
 ([input1, input2]) => console.log(input1, input2)
 ); 
-// logs all first, second, third values together: 1 1, 2 2, 3 3, 4 4, 5 5, 6 6
+// outputs
+ // 1, 1
+ // 2, 2
+ // 3, 3
+ // 4, 4
+ // 5, 5
+ // n, n
 ```
-As we can see the numbers get logged in pairs and in the right order.
-If one stream is faster than the other, the values of the faster one get cached and emitted when its related values arrive.
+
+As we can see the results get logged in correctly ordered pairs.
+If one source is faster than the other, the values get cached and emitted when its related values arrive.
 
 Here a visual representation of the above example:
 ![zip - different rates](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-zip-different-rates_michael-hladky.png)
-_zip - different rates_
+_zip - different timings_
 
-Also, for completely random emission rates zip always emits in the right pairs. 
-
+An example for random timings where `zip` still keeping the result in order
 ![zip - inner ongoing](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-zip-inner-ongoing_michael-hladky.png)
-_zip - inner ongoing_
+_zip - switching timings_
 
-Errors get forwarded as with all other combination operators. Same btw, is valid for the sibling operator `zipWith`.
-
+Errors get forwarded as in any other combination operator / function.
 ![zip - inner error](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-zip-inner-error_michael-hladky.png)
-_zip - inner error_
+_zip - error forwarding_
 
-A completion event of one Observable causes the operatro to internally wait for all missing pair values and then completes.
-
+A completion event of one source causes `zip` wait for all missing pair values and then completes.
 ![zip - inner complete](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-zip-inner-complete_michael-hladky.png)
 _zip - inner complete_
 
 ## 💡 Gotcha(s)!
-Be aware that `zip` can buit up a huge cache if the emission rate is too different.
-Also, if one of them never emits you have a memory leak.
+Be aware that `zip` can build a huge cache if emission rates are very different.
+If one of the sources never emits a value you will end up with a memory leak.
 
 ![zip - never emits if one source never emits](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators-zip-never-emits_michael-hladky.png)
 _zip - never emits if one source never emits_

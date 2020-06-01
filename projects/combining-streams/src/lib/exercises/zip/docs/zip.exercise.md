@@ -4,12 +4,12 @@
 
 ## Intro
 
-Our project got some updates, and we now display 2 lists.
+In addition to our list of posts, we want to display a list of posts that have comments. 
 
-On the left all blog post and on the right only the blog post with comments: 
+The template for the new list of commented posts.
 ```html
+<!--start.zip.component.ts-->
  <div class="row">
-
     <div style="width: 49%" *ngIf="blog$ | async as list">
       <b>All items</b>
       <mat-list>
@@ -20,25 +20,22 @@ On the left all blog post and on the right only the blog post with comments:
     </div>
 
 
-    <div style="width: 49%" *ngIf="commentedPosts$ | async as likedItems">
-      <b>Liked items</b>
+    <div style="width: 49%" *ngIf="commentedBlogPosts$ | async as commentedBlogPosts">
+      <b>Commented posts</b>
       <mat-list>
-        <mat-list-item *ngFor="let item of likedItems">
-          {{item.title}} - Comments: {{item.commentCount}}
+        <mat-list-item *ngFor="let post of commentedBlogPosts">
+          {{post.title}} - Comments: {{post.commentCount}}
         </mat-list-item>
       </mat-list>
     </div>
   </div>
 ```
 
-We are asked to improve the number of processing in this component and introduce counter properties in our class to enumerate the rendering.
+We can solve this task by utilizing the `combineLatest` creation function:
 
 ```Typescript
-  // Counter properties
-  numProcessJoinedList = 0;
-  numRenders = 0;
-  numProcessLikedList = 0;
-  
+// start.zip.component.ts
+
   // All blog posts 
   blog$ = combineLatest([
     this.blogPostService.posts$,
@@ -56,7 +53,7 @@ We are asked to improve the number of processing in this component and introduce
   );
 
   // Only commented blog posts 
-  commentedPosts$: Observable<BlogPost[]> = combineLatest([
+  commentedBlogPosts$: Observable<BlogPost[]> = combineLatest([
     this.blog$,
     this.commentedIds$
   ])
@@ -71,24 +68,16 @@ We are asked to improve the number of processing in this component and introduce
   }
 ```
 
-To get a cleaner picture of is happening we also render the values in the component:
+However, this will result in way to many render cycles.
+We can make the amount of renderings visible by introducing some helper variables and functions.
 
 ```typescript
-@Component({
-  selector: 'zip',
-  template: `
-  ...
-  <p><b>renders: {{renders()}}</b></p>
-  <p><b>processJoinedList: {{processJoinedList()}}</b></p>
-  <p><b>processLikedList: {{processLikedList()}}</b></p>
-  ...
-  `,
-})
-export class StartZipComponent {
+// start.zip.component.ts
 
+  // Counter properties
   numProcessJoinedList = 0;
   numRenders = 0;
-  numProcessLikedList = 0;
+  numProcessCommentedList = 0;
 
   processJoinedList() {
     return this.numProcessJoinedList;
@@ -98,19 +87,25 @@ export class StartZipComponent {
     return ++this.numRenders;
   }
 
-  processLikedList() {
-    return this.numProcessLikedList;
+  processCommentedList() {
+    return this.numProcessCommentedList;
   }
-}
 ```
 
-When clicking on the add button we realize the component is over-rendering, as the numbers are increasing un-proportionally to the data we receive.
+```html
+<!--start.zip.component.ts-->
+  <p><b>renders: {{renders()}}</b></p>
+  <p><b>processJoinedList: {{processJoinedList()}}</b></p>
+  <p><b>processCommentedList: {{processCommentedList()}}</b></p>
+```
+When adding a new `BlogPost` to the list we realize the component is over-rendering, as the numbers are increasing un-proportionally to the data we receive.
 
 ![](./assets/images/Reactive-architecture-and-ux-patterns_angular_combination-operators_over-rendering-with-combineLatest_michael-hladky.png)
 
 ## Exercise
 
-Try to implement operators that filter out values which should not get processed. e.g. empty arrays are not interesting to process.
-also, if multiple subscriptions get done on the same Observable we could try to share the processed result with all subscribers to reduce the number of processing.
-
-Also consider where and if `zip` could help here.
+Try to minimize the amount of renderings.
+Consider the following approaches:
+ - use `zip` to combine dependent changes
+ - filter out values which should not get processed
+ - _share_ the outcome of the streams
