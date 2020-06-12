@@ -22,10 +22,10 @@ export class InMemoryDataService implements InMemoryDbService {
     ];
     // const name is resource URL
     const posts: Post[] = [
-      {id: 1, title: 'Post 1'},
-      {id: 2, title: 'Post 2'},
-      {id: 3, title: 'Post 3'},
-      {id: 4, title: 'Post 4'}
+      {id: 1, title: 'Post 1', description: 'This is my first post!'},
+      {id: 2, title: 'Post 2', description: 'Get fascination information in this post.'},
+      {id: 3, title: 'Post 3', description: 'Learn how to get better and better in what you do!'},
+      {id: 4, title: 'Post 4', description: '5 things you should know'}
     ];
     return {comment: comments, post: posts};
   }

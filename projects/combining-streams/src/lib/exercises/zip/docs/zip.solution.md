@@ -33,14 +33,14 @@ blogPosts$ = combineLatest([
 ```
 
 **Numbers of processes for bootstrapping:**  
-renders: 5 (-1)  
-processJoinedList: 15 (-12)  
-processCommentedList: 9 (-8)
+renders: 6 (~)  
+processJoinedList: 21 (-6)  
+processCommentedList: 13 (-4)
 
 **Numbers of processes for new data:**  
-renders: 7 (Δ2 => ~)   
-processJoinedList: 21 (Δ6 => ~)  
-processCommentedList: 13 (Δ4 => ~)
+renders: 8 (Δ2 => ~)   
+processJoinedList: 27 (Δ6 => ~)  
+processCommentedList: 17 (Δ4 => ~)
 
 ## Step 2 - sharing results
 As `blogPosts$` gets subscribed to multiple times, we should share its processed values by using the `share` operator.
@@ -59,16 +59,16 @@ blogPosts$ = combineLatest([
 ```
 
 **Numbers of processes for bootstrapping:**  
-renders: 5 (-1)  
-processJoinedList: 5 (-22)  
-processCommentedList: 9 (-8)
+renders: 6 (~)  
+processJoinedList: 7 (-20)  
+processCommentedList: 13 (-4)
 
 **Numbers of processes for new data:**  
-renders: 7 (Δ2 => ~)   
-processJoinedList: 7 (Δ2 => -4)  
-processCommentedList: 13 (Δ4 => ~)
+renders: 8 (Δ2 => ~)   
+processJoinedList: 9 (Δ2 => -2)  
+processCommentedList: 17 (Δ4 => ~)
 
-## Step 3 - stream dependencies
+## Step 3 - Dependent stream
 
 The first improvements didn't change the way of processing, still led to a performance boost.
 To even further improve the performance of our application, lets take a closer look at the relations of the processed `Observables`.
@@ -99,14 +99,14 @@ commentedBlogPosts$: Observable<BlogPost[]> = zip(
 ```
 
 **Numbers of processes for bootstrapping:**  
-renders: 5 (-1)  
-processJoinedList: 5 (-22)  
-processCommentedList: 5 (-12)
+renders: 6 (-1)  
+processJoinedList: 7 (-20)  
+processCommentedList: 7 (-10)
  
 **Numbers of processes for new data:**  
-renders: 7 (Δ2 => ~)   
-processJoinedList: 7 (Δ2 => -4)  
-processCommentedList: 7 (Δ2 => -2)
+renders: 8 (Δ2 => ~)   
+processJoinedList: 9 (Δ2 => -2)  
+processCommentedList: 9 (Δ2 => -2)
 
 ## Conclusion
 

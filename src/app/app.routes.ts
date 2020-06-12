@@ -17,5 +17,9 @@ export const ROUTES = [
    {
         path: 'state-management',
         loadChildren: () => import('state-management').then(m => m.StateManagementModule)
-    }
+    },
+  {
+    path: 'flattening-operators',
+    loadChildren: () => import('flattening-operators').then(m => m.FlatteningOperatorsModule)
+  }
 ];

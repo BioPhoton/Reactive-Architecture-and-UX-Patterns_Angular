@@ -11,7 +11,7 @@ export const ROUTES = [
           .then(m => m.ForkJoinModule)
       },
       {
-        path: 'combineLatest',
+        path: 'switchMap',
         loadChildren: () => import('./exercises/combineLatest/combineLatest.module')
           .then(m => m.CombineLatestModule)
       },

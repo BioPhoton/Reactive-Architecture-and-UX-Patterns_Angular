@@ -33,6 +33,12 @@
       ],
       "shared/*": [
         "projects/shared/src/*"
+      ],
+      "flattening-operators": [
+        "projects/flattening-operators/src"
+      ],
+      "flattening-operators/*": [
+        "projects/flattening-operators/src/*"
       ]
     }
   },

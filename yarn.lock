@@ -5531,11 +5531,6 @@ levenary@^1.1.1:
   dependencies:
     leven "^3.1.0"
 
-lib@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/lib/-/lib-4.1.4.tgz#79c8ac84bbad25ce66a1fda2273d0cb651fb6cfb"
-  integrity sha512-YsmztYT0zyfbArwvxlGfTmvV05Udd4Q1dNAxEWYIFr6O4AQnzl1nT6Iu19n0NM/DkTJvQwIb9MzffSqy6v5gHw==
-
 license-webpack-plugin@2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/license-webpack-plugin/-/license-webpack-plugin-2.1.4.tgz#c5529a4bb87cc9b4489b486d054ba7cae43a554e"

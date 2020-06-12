@@ -12,7 +12,7 @@ import {ZipBlogService} from "combining-streams/lib/exercises/zip/zip-blog-post.
     <label>Name</label>
     <input matInput name="post" [(ngModel)]="title"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="blogPostService.addPost({title: title})">Add Comment
+  <button mat-raised-button color="primary" (click)="blogPostService.addPost({title: title})">Add Post
   </button>
 
   <p><b>renders: {{renders()}}</b></p>

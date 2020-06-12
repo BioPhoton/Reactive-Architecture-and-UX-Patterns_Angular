@@ -16,7 +16,7 @@
 
 ## Overview
 
-Welcome to my course! My name is Michael and I will lead you through this course.
+Welcome to my course! My name is Michael and I will lead you through this content.
 
 The title of this course is reactive architecture and UX patterns.
 As those are pretty broad terms let be elaborate a bit on the scope and target audience.

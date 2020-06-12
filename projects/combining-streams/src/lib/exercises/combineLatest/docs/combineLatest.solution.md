@@ -4,7 +4,7 @@ Combining the http requests with the `combineLatest` operator:
 
 **Component**
 ```Typescript
-// solution.combineLatest.component.ts 
+// solution.mergeMap.component.ts 
 
 blog$: Observable<BlogPost[]> = combineLatest([
     this.blogPostService.posts$,

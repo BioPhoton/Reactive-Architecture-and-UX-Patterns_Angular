@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ZipBlogService } from 'combining-streams/lib/exercises/zip/zip-blog-post.service';
 import { combineLatest, Observable, zip } from 'rxjs';
-import { filter, map, share, tap } from 'rxjs/operators';
+import {filter, map, share, skip, tap} from 'rxjs/operators';
 import { BlogPost, toBlogPosts } from 'shared';
 
 @Component({
@@ -12,7 +12,7 @@ import { BlogPost, toBlogPosts } from 'shared';
     <label>Name</label>
     <input matInput name="post" [(ngModel)]="title"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="blogPostService.addPost({title: title})">Add Comment
+  <button mat-raised-button color="primary" (click)="blogPostService.addPost({title: title})">Add Post
   </button>
 
   <p><b>renders: {{renders()}}</b></p>
@@ -56,8 +56,8 @@ export class StartZipComponent {
   numProcessCommentedList = 0;
 
   blogPosts$ = combineLatest([
-    this.blogPostService.posts$,
-    this.blogPostService.comments$
+    this.blogPostService.posts$.pipe(skip(1)),
+    this.blogPostService.comments$.pipe(skip(1))
   ]).pipe(
     map(([list, items]) => toBlogPosts(list, items)),
     tap(v => ++this.numProcessJoinedList),
@@ -72,10 +72,10 @@ export class StartZipComponent {
   );
 
   // Only commented blog posts
-  commentedBlogPosts$: Observable<BlogPost[]> = combineLatest([
+  commentedBlogPosts$: Observable<BlogPost[]> = zip(
     this.blogPosts$,
     this.commentedIds$
-  ])
+  )
     .pipe(
       map(([mergedList, commentedIds]) => (mergedList.filter(i => commentedIds.find(li => li === i.id)))),
       tap(v => ++this.numProcessCommentedList)

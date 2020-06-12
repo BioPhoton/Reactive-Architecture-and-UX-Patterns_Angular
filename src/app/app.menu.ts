@@ -12,5 +12,9 @@ export const MENU_ITEMS: MenuItem[] = [
     {
         label: 'State Management',
         link: '/state-management'
+    },
+    {
+        label: 'Flattening Operators',
+        link: '/flattening-operators'
     }
 ];

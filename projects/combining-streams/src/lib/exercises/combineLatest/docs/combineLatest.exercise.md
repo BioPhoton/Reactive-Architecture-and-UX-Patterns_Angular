@@ -20,7 +20,7 @@ of binding `Components` directly to HTTP Requests, we will feed the data store w
 
 **Service**
 ```Typescript
-// combine-latest-blog.service.ts
+// mergeMap-blog.service.ts
 
 private readonly state$ = new BehaviorSubject<BlogServiceState>({
     posts: [] as Post[],
@@ -68,7 +68,7 @@ We also initially fetch the posts and comments from the server when the service 
 
 **Service**
 ```Typescript
-// combine-latest-blog.service.ts
+// mergeMap-blog.service.ts
 
 // ...
 constructor(...) {

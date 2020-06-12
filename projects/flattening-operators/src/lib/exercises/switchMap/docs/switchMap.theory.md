@@ -1,0 +1,1 @@
+# `switchMap` operator function - Theory

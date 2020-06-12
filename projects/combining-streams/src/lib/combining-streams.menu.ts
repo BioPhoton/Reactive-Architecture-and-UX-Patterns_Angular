@@ -6,8 +6,8 @@ export const MENU_ITEMS: MenuItem[] = [
     link: './forkJoin'
   },
   {
-    label: 'combineLatest',
-    link: './combineLatest'
+    label: 'switchMap',
+    link: './switchMap'
   },
   {
     label: 'withLatestFrom',
