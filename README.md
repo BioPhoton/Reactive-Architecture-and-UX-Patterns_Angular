@@ -48,7 +48,7 @@ Exercises we will master are:
   - Editing and user-controlled  opt-In updates
   - Optimize View updates and  Performance
   - Comparison of the combination patterns
--  Reactive State-Management    
+- Reactive State-Management    
   - State aggregation
   - Model vs ViewModel
   - Sharing state and instances
