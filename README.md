@@ -64,5 +64,11 @@ Exercises we will master are:
   - Load balancing  and polling
   - Offline friendly and exponential backoff
   - Comparison of the different retry & repeat mechanisms
+- Reactive Template Rendering and Performance Optimisations
+  - Angular Change Detection in-depth
+  - The principle of Locallity in Angular Components
+  - Template Helpers of Rendering
+  - Analizing and Fixing Blocking UI
+  - Zone-Less Change Detection
 
 Let’s jump right in and start with the first section.
